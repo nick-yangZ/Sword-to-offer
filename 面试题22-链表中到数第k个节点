@@ -1,0 +1,33 @@
+#include <cstdio>
+#include <memory>
+#include<iostream>
+#include<vector>
+using namespace std;
+//题目要的是输出倒数第n个节点，并不是要求输出！！！没看清题目要求！！！而且不是第6个节点，而是到数第k个节点。
+struct ListNode
+{
+	int m_nvalue;
+	ListNode*m_pNext;
+};
+ListNode* FindPoint(ListNode **pHead,unsigned int k) {//不需要对头指针操作，因此不需要使用指向指针的指针，不过这样也没有错。
+	if (*pHead == nullptr||k==0) {
+		cout << "Invalid Array" << endl;
+		return nullptr;
+	}
+	ListNode *pNode = *pHead;
+	ListNode *pToBeFind = nullptr;
+	vector<ListNode*> pointmem;
+	int num;
+	for (num = 0; pNode != nullptr; num++, pNode=pNode->m_pNext) {
+		pointmem.push_back(pNode);
+	}
+	if (num < 6) {
+		cout << "Invalid Array because of less than 6 Point" << endl;
+		return nullptr;
+	}
+	else 
+	{
+		pToBeFind = pointmem[num - 6];	
+	}
+	return pToBeFind;
+}
