@@ -49,5 +49,4 @@ int main() {
 	p5.pNext = &p6;
 	p6.pNext = nullptr;
 	ListNode*Find= FindTheOrigin(&p1);
-
 }
