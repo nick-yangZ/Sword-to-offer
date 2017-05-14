@@ -1,0 +1,53 @@
+#include <cstdio>
+#include <memory>
+#include<iostream>
+#include<vector>
+using namespace std;
+
+struct ListNode {
+	int value;
+	ListNode*pNext;
+};
+bool FindTheOriginCore(vector<ListNode*>uncircle, ListNode*pNode);
+ListNode* FindTheOrigin(ListNode*pHead) {
+	if (pHead == nullptr) {
+		return nullptr;
+	}
+	vector<ListNode*> uncircle;
+	ListNode*pNode = pHead;
+	while (!FindTheOriginCore(uncircle, pNode) &&pNode!=nullptr) {
+		uncircle.push_back(pNode);
+		pNode = pNode->pNext;
+	}
+	return pNode;
+	
+}
+bool FindTheOriginCore(vector<ListNode*>uncircle, ListNode*pNode) {
+	if (uncircle.size() == 0)
+		return false;
+	for (int i = 0; i < uncircle.size(); i++) {
+		if (pNode == uncircle[i]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+int main() {
+	ListNode p1, p2,p3, p4, p5, p6;
+	p1.value = 1;
+	p2.value = 2;
+	p3.value = 3;
+	p4.value = 4;
+	p5.value = 5;
+	p6.value = 6;
+
+	p1.pNext = &p2;
+	p2.pNext = &p3;
+	p3.pNext = &p4;
+	p4.pNext = &p5;
+	p5.pNext = &p6;
+	p6.pNext = nullptr;
+	ListNode*Find= FindTheOrigin(&p1);
+
+}
