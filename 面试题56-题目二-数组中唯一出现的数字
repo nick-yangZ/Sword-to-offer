@@ -1,0 +1,58 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"BinaryTree.h"
+using namespace std;
+
+//面试题56-题目二-数组中唯一出现一次的数字
+//思路：将二进制位的数字全部加起来，如果和能被3整除，即为出现三次的数字，如果不能被整除，则这位是单独的数字留下的。
+int TheBitTotal(const int *pNum, int length, int bit);
+int GetTheNumber(int *pNum,int length) {
+	if (pNum == nullptr || length <= 0)
+		throw new exception("Invalid input");
+	int bit[32];
+	int result=0;
+
+	for (int i = 0; i < 32; i++) {
+		bit[i] = TheBitTotal(pNum, length, i);
+		bit[i] = bit[i] % 3;
+		if (bit[i] == 1)
+			result +=(int)pow(2, i );
+	}
+	return result;
+}
+int TheBitTotal(const int *pNum, int length,int bit) {
+	int pNode = 0;
+	int count = 0;
+	for (int i = 0; i < length; i++) {
+		pNode = pNum[i];
+		pNode=pNode >> bit;
+		if (pNode & 1)
+			count++;
+	}
+	return count;
+}
+
+int main() {
+	int nArray[] = { 2,3,4,323,2,3,4,2,3,4};
+	try
+	{
+		int result = GetTheNumber(nArray,10);
+		throw  new exception("Invalid Input");//这个是new出来的，需要用指针接受。
+	}
+	catch (exception *cd)
+	{
+		cout << cd->what();
+	}
+
+
+	return 0;
+}
