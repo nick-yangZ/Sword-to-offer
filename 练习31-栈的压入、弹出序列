@@ -1,0 +1,59 @@
+#include<iostream>
+using namespace std;
+
+
+bool MatchPopWithPush(int *pPushOrder,int *pPopOrder,int nlength) {
+	if (pPushOrder == nullptr || pPopOrder == nullptr)
+		return false;
+	int *pPushNode=pPushOrder, *pPopNode=pPopOrder;
+	bool *InTheStack = new bool[nlength];
+	memset(InTheStack, false, nlength);
+	int i = 0,j=0;
+	while (i<nlength&&pPopNode[i]) {
+		while (pPopNode[i] != pPushNode[j] && j<nlength) {
+			if(pPushNode[j]!='\0')
+				InTheStack[j] = true;
+			j++;
+		}
+		if (j==nlength)//这个说明出栈数组的元素并未在入栈元素中，返回false。
+			return false;
+		pPushNode[j] = '\0';
+		InTheStack[j] = false;
+		while (j+1 < nlength) {//如果有后面有元素还未出栈说明顺序有问题。返回false。
+			if (InTheStack[j + 1] == true)
+				return false;
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+	return true;
+}
+void Test(char*Testname, int *pPushOrder, int *pPopOrder, int nlength, bool expected) {
+	cout << Testname<<": ";
+	if (pPopOrder == nullptr|| pPopOrder == nullptr) {
+		cout << "FAILED,Because of Invalid int array" << endl;
+		return;
+	}
+	if (MatchPopWithPush(pPushOrder, pPopOrder, nlength) == expected) {
+		cout << "Pass" << endl;
+		return;
+	}
+	cout << "FAILED" << endl;
+}
+int main() {
+	int pPushOrder[] = { 1,2,3,4,5 };
+	int pPopOrder1[] = { 4,5,3,2,1 };
+	int pPopOrder2[] = { 4,3,5,1,2 };
+	int pPushOrder2[] = { 1,2,3,4,5,6,7,8 };
+	int pPopOrder3[] = { 4,9,5,6,3,2,1,8 };
+	int *pPushOrder3 = nullptr;
+	int *pPopOrder4 = nullptr;
+	Test("Test1", pPushOrder, pPopOrder1, 5, true);
+	Test("Test2", pPushOrder, pPopOrder2, 5, false);
+	Test("Test3", pPushOrder2, pPopOrder3, 8, false);
+	Test("Test3", pPushOrder3, pPopOrder4, 4, false);
+	return 0;
+
+}
+
