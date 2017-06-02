@@ -1,0 +1,56 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"BinaryTree.h"
+using namespace std;
+
+//面试题59-队列的最大值
+//思路：使用两个指针模拟滑动窗口，两个指针滑动的过程中，若右侧新
+//滑到的数字是最大值，则更换最大值。如果左侧指针为最大值，则滑动后，重新评定最大值。
+int GetTheSingleWindowMax(int* pNumArray, int start, int end);
+int * GetEveryWindowMax(int *pNumArray,int length, int nWindowSize) {
+	if (pNumArray == nullptr || nWindowSize <= 0)
+		return nullptr;
+	int *pWindowMax = new int[length - nWindowSize+1];
+	int start = 0, end = nWindowSize - 1;
+	int nMaxPostion = GetTheSingleWindowMax(pNumArray, start, end);
+	int *pWindowMaxNode = pWindowMax;
+	*pWindowMaxNode = pNumArray[nMaxPostion];
+	pWindowMaxNode++;
+	while (end < length-1) {
+		end++;
+		if (pNumArray[nMaxPostion] < pNumArray[end])
+			nMaxPostion = end;
+		else if (start == nMaxPostion)
+			nMaxPostion = GetTheSingleWindowMax(pNumArray, start+1, end);
+		start++;
+		*pWindowMaxNode = pNumArray[nMaxPostion];
+		pWindowMaxNode++;
+	}
+	return pWindowMax;
+		
+}
+int GetTheSingleWindowMax(int* pNumArray,int start,int end) {
+	if (pNumArray == nullptr || start < 0 || end<0 || start>end)
+		throw new exception("Function <GetTheSingleWindow> 's arguments is invalid");
+	int nTheMaxPostion = start;
+	for (int i = start + 1; i <= end; i++) {
+		if (nTheMaxPostion < pNumArray[i])
+			nTheMaxPostion = i;
+	}
+	return nTheMaxPostion;
+}
+
+int main() {
+	int nNumArray[] = { 2,3,4,2,6,2,5,1 };
+	int *pWindowMax = GetEveryWindowMax(nNumArray, 8, 3);
+	return 0;
+}
