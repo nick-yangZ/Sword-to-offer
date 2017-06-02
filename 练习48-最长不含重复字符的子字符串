@@ -1,0 +1,61 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+using namespace std;
+bool FindTheRepeatChar(char*pCurStart, char*pNode, char*&pRepeatNode);
+queue<char> GetTheLongestUnrepeatString(char *Str) {
+	queue <char> TheLongestUnrepeatString;
+	queue <char> CurrentUnrepeatString;
+	if (Str == nullptr)
+		return TheLongestUnrepeatString;
+	char*pNode=Str;
+	char*pCurStart=pNode;
+	char*pRepeatNode;
+	while (*pNode != '\0') {//错误1.值的比较写成了指针的比较。
+		if (FindTheRepeatChar(pCurStart, pNode, pRepeatNode)) {//当找到重复的字母，看当前的CurrentUnrepeatString和最长的比
+														//如果比最长的还要长，则交换。				
+			if (TheLongestUnrepeatString.size() < CurrentUnrepeatString.size()) {
+				TheLongestUnrepeatString=CurrentUnrepeatString;						
+			}
+			pCurStart = pRepeatNode + 1;//错误3.应该跟着一起从上面的if中移出来。
+			while (CurrentUnrepeatString.front() != *pCurStart)//错误2.无论交不交换最长字符串都要重新定义起始点。
+				CurrentUnrepeatString.pop();
+		}
+		CurrentUnrepeatString.push(*pNode);
+		pNode++;	
+	}
+	if (TheLongestUnrepeatString.size() < CurrentUnrepeatString.size())
+		TheLongestUnrepeatString=CurrentUnrepeatString;
+	return TheLongestUnrepeatString;
+
+}
+bool FindTheRepeatChar(char*pCurStart,char*pNode,char*&pRepeatNode) {	
+	if (pCurStart == nullptr&&pNode == nullptr) {
+		cout << "Invalid FindTheRepeatChar" << endl;
+		return true;
+	}
+	char *pCurNode = pCurStart;
+	while (pCurNode != pNode) {
+		if (*pCurNode == *pNode) {
+			pRepeatNode = pCurNode;
+			return true;
+		}
+		pCurNode++;
+	}
+	return false;
+}
+
+
+int main() {
+	char p[] = "arabcacfro";
+	
+	queue<char>result= GetTheLongestUnrepeatString(p);
+
+	return 0;
+
+}
