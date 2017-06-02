@@ -1,0 +1,47 @@
+#include<iostream>
+#include<stack>
+#include<queue>
+
+using namespace std;
+
+struct BinaryTreeNode {
+	int m_nValue;
+	BinaryTreeNode *m_pLeft;
+	BinaryTreeNode *m_pRight;
+	BinaryTreeNode(int m_nValue) {
+		this->m_nValue = m_nValue;
+		m_pLeft = nullptr;
+		m_pRight = nullptr;
+	}
+};
+
+void PrintBinaryTreeWithLevel(BinaryTreeNode *pRoot) {
+	if (pRoot == nullptr)
+		return;
+	queue<BinaryTreeNode*> QueueNode;
+	BinaryTreeNode *pNode=pRoot;
+	QueueNode.push(pNode);
+	while (QueueNode.empty() != true) {
+		pNode = QueueNode.front();
+		QueueNode.pop();
+		if (pNode->m_pLeft != nullptr) {
+			QueueNode.push(pNode->m_pLeft);
+		}
+		if (pNode->m_pRight != nullptr) {
+			QueueNode.push(pNode->m_pRight);
+		}
+		cout << pNode->m_nValue << " ";
+	}
+}
+int main() {
+	BinaryTreeNode *pRoot=new BinaryTreeNode(8);
+	pRoot->m_pLeft = new BinaryTreeNode(6);
+	pRoot->m_pLeft->m_pLeft = new BinaryTreeNode(5);
+	pRoot->m_pLeft->m_pRight = new BinaryTreeNode(7);
+	pRoot->m_pRight = new BinaryTreeNode(10);
+	pRoot->m_pRight->m_pLeft = new BinaryTreeNode(9);
+	pRoot->m_pRight->m_pRight = new BinaryTreeNode(11);
+	PrintBinaryTreeWithLevel(pRoot);
+	return 0;
+}
+
