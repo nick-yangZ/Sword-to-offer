@@ -1,0 +1,40 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"ListNode.h"
+using namespace std;
+
+//面试题64-求1+2+3+...+n:要求不可以用for,while,if,else,switch,case等关键字。
+//思路分析：利用类的静态函数和静态成员变量，类的静态成员变量相当于所有类对象共享，值保存在类定义中。
+//静态成员变量只能与静态成员函数配合使用。
+class Temp {
+private:
+	static unsigned int N;
+	static unsigned int Sum;
+public:
+	static void Reset() { N = 0; Sum = 0; }
+	Temp() { ++N, Sum += N; }
+	static unsigned int GetSum() { return Sum; }
+};
+unsigned int Temp::N = 0;
+unsigned int Temp::Sum = 0;
+unsigned int Sum_Solution1(unsigned int n) {
+	Temp::Reset();//静态函数可以由类名调用。
+	Temp*a = new Temp[n];
+	delete[]a;
+	a = nullptr;
+	return Temp::GetSum();
+}
+
+int main() {
+	Sum_Solution1(10);
+	return 0;
+}
