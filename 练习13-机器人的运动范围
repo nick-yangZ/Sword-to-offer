@@ -1,0 +1,51 @@
+#include<iostream>
+#include<stack>
+using namespace std;
+
+
+
+void MovingCountCore(static int &hold, int row, int col, bool*pass, int rows, int cols) {
+	if (hold < 0 || row < 0 || col < 0 || pass == nullptr) {
+		return;
+	}
+
+	if (pass[row*rows + col] == false && ((row+1)/ 10 + (row+1) % 10 + (col+1)/ 10 + (col+1) % 10 )<= 2 && row < rows&&col < cols) {
+		
+		hold++;
+		pass[row*rows + col] = true;
+		MovingCountCore(hold, row + 1, col, pass, rows, cols);  
+		MovingCountCore(hold, row - 1, col, pass, rows, cols);
+		MovingCountCore(hold, row, col + 1, pass, rows, cols);
+		MovingCountCore(hold, row, col - 1, pass, rows, cols);
+
+	}
+
+	return;
+}
+int MovingCount(int rows, int cols) {
+	static int hold=0;
+	if (rows <= 1 || cols <= 1) {
+		return 0;
+	}
+	bool *pass=new bool[rows*cols];
+	memset(pass, false, rows*cols);
+	for (int row=0; row < rows; row++) {
+		for (int col=0; col < cols; col++) {
+			
+			MovingCountCore(hold,row,col,pass,rows,cols);
+			
+		}
+	}
+	return hold;
+}
+
+
+
+int main() {
+	int rows =10 ;
+	int cols = 10;
+	int hold = 0;
+	hold = MovingCount(rows, cols);
+
+	return 0;
+}
