@@ -1,0 +1,38 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+using namespace std;
+//编写和理解有问题，原题并没有说字符限定在a-z之间。 
+
+char FindTheChar(char * Str) {
+	if (Str == nullptr)
+		return '\0';
+	const int tableSize = 256;
+	unsigned int hashTable[tableSize];
+	for (unsigned int i = 0; i < tableSize; ++i) {
+		hashTable[i] = 0;
+	}
+	char*pHashKey = Str;
+	while (*(pHashKey) != '\0')
+		hashTable[*(pHashKey++)]++;
+	pHashKey = Str;
+	while (*pHashKey != '\0') {
+		if (hashTable[*pHashKey] == 1)
+			return *pHashKey;
+		pHashKey++;
+	}
+	return '\0';
+}
+
+int main() {
+	char Str[] = "abaccdeff";
+	FindTheChar(Str);
+	int m = 'a';
+	return 0;
+}
