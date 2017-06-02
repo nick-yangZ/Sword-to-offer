@@ -1,0 +1,39 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<vector>
+#include "BinaryTree.h"
+using namespace std;
+//找出n个数中，最小的k个数。
+
+int FindTheBiggestSum(const int *pHead,int length) {
+	if (pHead == nullptr||length<=0)
+		return 0;
+	int SumMax = pHead[0], Sum = pHead[0];
+	int pNumNode = 0;
+	while (pNumNode < length) {
+		if (Sum < 0)
+			Sum = pHead[pNumNode];		
+		}
+		else {
+			Sum = Sum + [pNumNode];
+
+		}
+		SumMax = SumMax > Sum ? SumMax : Sum;
+		pNumNode++;
+	}
+	return SumMax;
+}
+
+int main() {
+	int T1[] = {1, -2,3,10,-4,7,2,-5 };
+	int T2[] = { 0,0,0,0,0,0 };
+	int T3[] = { 2,-2,-3,5,-4,2,-2,7,8 };
+	int nBiggestSum;
+	nBiggestSum=FindTheBiggestSum(T1,8);
+	nBiggestSum=FindTheBiggestSum(T2, 6);
+	nBiggestSum=FindTheBiggestSum(T3, 9);
+
+	return 0;
+
+}
