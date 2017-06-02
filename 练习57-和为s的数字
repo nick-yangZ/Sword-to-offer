@@ -1,0 +1,69 @@
+
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"BinaryTree.h"
+using namespace std;
+int GetTheMiddlePoint(int *pNumber, int nSumNumber, int start, int end);
+bool GetTwoNumbers(int *pNumber, int nSumNumber, int length,int &nNumber1, int &nNumber2) {
+	if (pNumber == nullptr || length <= 1)
+		return false;
+	int nHalfSumNumberPosition = GetTheMiddlePoint(pNumber, nSumNumber, 0, length - 1);
+	if (pNumber[nHalfSumNumberPosition] * 2 == nSumNumber) {
+		if (pNumber[nHalfSumNumberPosition] == pNumber[nHalfSumNumberPosition - 1] || pNumber[nHalfSumNumberPosition] == pNumber[nHalfSumNumberPosition + 1])
+		{
+			nNumber1 = nNumber2 = pNumber[nHalfSumNumberPosition];
+			return true; 
+		}
+	}
+	int nSmall=nHalfSumNumberPosition, nBig=nHalfSumNumberPosition;
+	while (nSmall >= 0 && nBig < length) {
+		if (pNumber[nSmall] + pNumber[nBig] == nSumNumber) {
+			nNumber1 = pNumber[nSmall];
+			nNumber2 = pNumber[nBig];
+			return true;
+		}
+		else if (pNumber[nSmall] + pNumber[nBig] < nSumNumber)
+			nBig++;
+		else
+			nSmall--;
+	}
+	return false;
+}
+int GetTheMiddlePoint(int *pNumber, int nSumNumber,int start,int end) {
+	if (pNumber == nullptr || start < 0 || end<0 || start>end)
+		throw new exception("Invalid Array.");
+	int nSumNumberHalf = nSumNumber / 2;
+	int nArrayMiddle = (start + end) / 2;
+	int nSumNumberHalfPosition = -1;
+	if (start == end)
+		return start;
+	if (nSumNumberHalf == pNumber[nArrayMiddle])
+		nSumNumberHalfPosition=nArrayMiddle;
+	else if (nSumNumberHalf < pNumber[nArrayMiddle])
+		nSumNumberHalfPosition=GetTheMiddlePoint(pNumber, nSumNumber, start, nArrayMiddle - 1);
+	else
+		nSumNumberHalfPosition=GetTheMiddlePoint(pNumber, nSumNumber, nArrayMiddle + 1, end);
+
+	return nSumNumberHalfPosition;
+
+}
+int main() {
+	int NumArray[] = { 1,2,4,7,11,15};
+	int nNumber1=0, nNumber2=0;
+	if (GetTwoNumbers(NumArray, 11, 6, nNumber1, nNumber2)) {
+		cout << nNumber1 << " " << nNumber2;
+	}
+	else
+		cout << "There is no asked number";
+
+	return 0;
+}
