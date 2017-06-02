@@ -1,0 +1,58 @@
+#include<iostream>
+#include<stack>
+
+using namespace std;
+
+bool IsPopOrder(const int*pPush, const int*pPop, int nlength) {
+	if (pPush == nullptr || pPop == nullptr || nlength < 0) {
+		return false;
+	}
+	const int*pNextPush = pPush;
+	const int*pNextPop = pPop;
+	stack<int> StackData;
+	bool IsPopOrder = false;
+	while (pNextPop - pPop < nlength) {
+		while (StackData.empty() == true ||*pNextPop!=StackData.top()) {
+			StackData.push(*pNextPush);
+			pNextPush++;
+			if (pNextPush - pPush == nlength)
+				break;
+		}
+		if (*pNextPop != StackData.top())
+			break;
+		StackData.pop();
+		pNextPop++;
+
+	}
+	if (pNextPop - pPop == nlength&&StackData.empty() == true)
+		IsPopOrder = true;
+	return IsPopOrder;
+}
+
+void Test(char*Testname, int *pPushOrder, int *pPopOrder, int nlength, bool expected) {
+	cout << Testname << ": ";
+	if (pPopOrder == nullptr || pPopOrder == nullptr) {
+		cout << "FAILED,Because of Invalid int array" << endl;
+		return;
+	}
+	if (IsPopOrder(pPushOrder, pPopOrder, nlength) == expected) {
+		cout << "Pass" << endl;
+		return;
+	}
+	cout << "FAILED" << endl;
+}
+int main() {
+	int pPushOrder[] = { 1,2,3,4,5 };
+	int pPopOrder1[] = { 4,5,3,2,1 };
+	int pPopOrder2[] = { 4,3,5,1,2 };
+	int pPushOrder2[] = { 1,2,3,4,5,6,7,8 };
+	int pPopOrder3[] = { 4,7,5,6,3,2,1,8 };
+	int *pPushOrder3 = nullptr;
+	int *pPopOrder4 = nullptr;
+	Test("Test1", pPushOrder, pPopOrder1, 5, true);
+	Test("Test2", pPushOrder, pPopOrder2, 5, false);
+	Test("Test3", pPushOrder2, pPopOrder3, 8, true);
+	Test("Test3", pPushOrder3, pPopOrder4, 4, false);
+ 	return 0;
+
+}
