@@ -1,0 +1,50 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<stack>
+#include<stdlib.h>
+#include<vector>
+#include "BinaryTree.h"
+using namespace std;
+//把数字翻译成字符
+void TranslateModeTotalCore(char *Num, int &TranslateModeTotal);
+int TranslateModeTotal(int num) {
+	if (num < 0)
+		return 0;
+	char Num[50];
+	_itoa(num, Num, 10);
+	int nTransTotal=0;
+	TranslateModeTotalCore(Num, nTransTotal);
+	delete[]Num;
+	return nTransTotal;
+
+}
+
+void TranslateModeTotalCore(char *Num, int &TranslateModeTotal) {
+	if (Num == nullptr ||TranslateModeTotal<0) {
+		return ;
+	}
+	if (*Num == '\0') {
+		TranslateModeTotal++;
+		return ;
+	}
+	
+	TranslateModeTotalCore(Num+1,  TranslateModeTotal);//这种格式不可以，这个格式的意思是等本次执行之后再Num+1，到函数中相当
+														//于根本没有移动。
+	if (Num[1] != '\0') {
+		char Next[2] = { Num[0],Num[1] };
+		int charnum = atoi(Next);
+		delete[]Next;
+		if(charnum<26)
+			TranslateModeTotalCore(Num + 2, TranslateModeTotal);
+	}
+	
+}
+
+int main() {
+	int m = 426;
+	int result =TranslateModeTotal(m);
+
+	return 0;
+}
+
