@@ -1,0 +1,42 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+using namespace std;
+int Min(int a, int b, int c);
+int GetUglyNumber(int index) {
+	if (index < 0)
+		return 0;
+	int	*pUglyArray = new int[index]; //这里需要用动态创建。
+	pUglyArray[0] = 1;
+	int pNextUgly=1;
+	int *pMultiplay2, *pMultiplay3, *pMultiplay5;
+	pMultiplay2 = &pUglyArray[0];
+	pMultiplay3 = &pUglyArray[0];
+	pMultiplay5 = &pUglyArray[0];
+	while (pNextUgly < index) {
+		pUglyArray[pNextUgly] = Min(*pMultiplay2 * 2, *pMultiplay3 * 3, *pMultiplay5 * 5);
+		if (*pMultiplay2 * 2 == pUglyArray[pNextUgly])
+			pMultiplay2++;
+		if (*pMultiplay3 * 3 == pUglyArray[pNextUgly])
+			pMultiplay3++;
+		if (*pMultiplay5 * 5 == pUglyArray[pNextUgly])
+			pMultiplay5++;
+		pNextUgly++;
+	}
+	return pUglyArray[index - 1];
+}
+int Min(int a, int b, int c) {
+	int Min = a < b ? a: b;
+	Min = Min < c ? Min : c;
+	return Min;
+}
+int main() {
+	GetUglyNumber(7);
+
+	return 0;
+}
