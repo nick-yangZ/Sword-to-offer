@@ -1,0 +1,93 @@
+#include<iostream>
+#include<stack>
+#include<queue>
+using namespace std;
+//错误总结：1.82行未迭代到下一个节点。没有对节点的m_pSibling是否有对应节点进行考虑。
+//作者给的解法是将新旧节点串在一起，为copy数组找pSibling变量。
+
+struct ComplexListNode {
+	int m_nValue;
+	ComplexListNode*m_pNext;
+	ComplexListNode*m_pSibling;
+};
+ComplexListNode*& Create(int m_nValue);
+void MatchTheSibling(ComplexListNode*pHead, ComplexListNode*&pCloneHead);
+ComplexListNode*& Create(int m_nValue) {
+	ComplexListNode*pNew = new ComplexListNode;
+	pNew->m_nValue = m_nValue;
+	pNew->m_pNext = nullptr;
+	pNew->m_pSibling = nullptr;
+	return pNew;
+}
+
+ComplexListNode* Clone(ComplexListNode* pHead) {
+	if (pHead == nullptr) {
+		return nullptr;
+	}
+	ComplexListNode*pCloneHead = new ComplexListNode;
+	ComplexListNode*pCloneNode = pCloneHead;
+	ComplexListNode*pNode = pHead;
+	while (pNode != nullptr) {
+		pCloneNode->m_pNext = Create(pNode->m_nValue);
+		pNode = pNode->m_pNext;
+		pCloneNode = pCloneNode->m_pNext;
+	}
+	pCloneNode = pCloneHead;
+	pCloneHead = pCloneHead->m_pNext;
+	delete pCloneNode;
+	pCloneNode = pCloneHead;
+	if (pCloneHead != nullptr)
+		MatchTheSibling(pHead, pCloneHead);
+	return pCloneHead;
+
+
+}
+void MatchTheSibling(ComplexListNode*pHead, ComplexListNode*&pCloneHead) {
+	ComplexListNode*pNode = pHead, *pNodeMatch = pHead;
+	ComplexListNode*pCloneNode = pCloneHead, *pCloneNodeMatch = pCloneHead;
+
+	while (pNode != nullptr) {
+		if (pNode->m_pSibling == nullptr) {
+			pNode = pNode->m_pNext;
+			pCloneNode = pCloneNode->m_pNext;
+			continue;
+		}
+		while (pNode->m_pSibling != pNodeMatch&&pNodeMatch != nullptr) {
+			pNodeMatch = pNodeMatch->m_pNext;
+			pCloneNodeMatch = pCloneNodeMatch->m_pNext;
+		}
+		if (pNodeMatch == nullptr) {
+			cout << "The Node " << pNode->m_nValue << "'s Sibling is Invalid" << endl;
+			pCloneHead = nullptr;
+		}
+		pCloneNode->m_pSibling = pCloneNodeMatch;
+		pNode = pNode->m_pNext;
+		pCloneNode = pCloneNode->m_pNext;
+		pNodeMatch = pHead;
+		pCloneNodeMatch = pCloneHead;
+	}
+
+}
+
+int main() {
+	vector<ComplexListNode*> ListNodeArray;
+	ComplexListNode*pHead, *pNode, *pCloneHead;
+
+	pHead = new ComplexListNode;
+	ComplexListNode *pNew;
+	pNode = pHead;
+	for (int i = 1; i < 6; i++) {
+		pNew = Create(i);
+		ListNodeArray.push_back(pNew);
+		pNode->m_pNext = pNew;
+		pNode = pNode->m_pNext;
+	}
+	pHead = pHead->m_pNext;
+	ListNodeArray[0]->m_pSibling = ListNodeArray[2];
+	ListNodeArray[1]->m_pSibling = ListNodeArray[4];
+	ListNodeArray[3]->m_pSibling = ListNodeArray[1];
+	pCloneHead = Clone(pHead);
+
+	return 0;
+
+}
