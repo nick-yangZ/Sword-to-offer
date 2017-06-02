@@ -1,0 +1,49 @@
+#include<iostream>
+#include<stack>
+#include<queue>
+static int i = 0;
+struct BinaryTreeNode
+{
+	int m_nValue;
+	BinaryTreeNode *m_pLeft;
+	BinaryTreeNode *m_pRight;
+	BinaryTreeNode(int m_nValue) {
+		this->m_nValue = m_nValue;
+		m_pLeft = nullptr;
+		m_pRight = nullptr;
+	}
+
+};
+bool VerifySqueuenceOfBST(int sequeuence[], int length) {
+	if (sequeuence == nullptr || length <= 0)
+		return false;
+	int Devide=0,Check=0;
+	int nRoot=sequeuence[length-1];
+	bool CheckLeft = true;
+	bool CheckRight = true;
+	bool CheckResult=false;
+	while ( sequeuence[Devide]<nRoot) {
+		Devide++;
+	}
+	Check = Devide;
+	while (Check<length-1)
+	{
+		if (sequeuence[Check] < nRoot)
+			return false;	
+		Check++;
+	}
+	if (Devide >0 )
+		CheckLeft= VerifySqueuenceOfBST(sequeuence, Devide);
+	if (Devide + 1 < length - 2)
+		CheckRight= VerifySqueuenceOfBST(sequeuence + Devide , length - Devide - 1);
+	CheckResult = CheckLeft&&CheckRight;
+	return CheckResult;
+	
+}
+
+int main() {
+	int number[7] = { 5,7,6,9,11,10,8 };
+	
+	VerifySqueuenceOfBST(number, 8);
+	return 0;
+}
