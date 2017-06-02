@@ -1,0 +1,51 @@
+#include<iostream>
+using namespace std;
+
+struct ListNode {
+	int m_nKey;
+	ListNode*m_pNext;
+	ListNode(int m_nKey) {
+		this->m_nKey = m_nKey;
+		m_pNext = nullptr;
+	}
+};
+
+void PrintListReversingly_Recurisively(ListNode*pHead) {
+	int print_nKey;
+	if (pHead->m_pNext != nullptr) {//符合条件就调用递归函数模型，不符合就执行用户下达的指令，
+									//代表搜索到了末尾，准备返回了，在else中执行用户想执行的指令。
+		print_nKey = pHead->m_nKey;
+		pHead = pHead->m_pNext;
+		PrintListReversingly_Recurisively(pHead);
+	}
+	else
+		print_nKey = pHead->m_nKey;
+	cout << print_nKey << endl;
+}
+/*
+void PrintListReversingly_Recurisively(ListNode*pHead) {
+	if (pHead != nullptr) {
+		if (pHead->m_pNext != nullptr) {
+			PrintListReversingly_Recurisively(pHead->m_pNext);
+		}
+		printf("%d\t", pHead->m_nKey);
+	}
+}
+*/
+int main() {
+	int  i=2;
+	ListNode *Head = new ListNode(1);
+	ListNode *Create,*Node;
+	Node = Head;
+	while (i<6)
+	{
+	
+		Create = new ListNode(i);
+		Node->m_pNext = Create;
+		Node = Node->m_pNext;
+		i++;
+	}
+	PrintListReversingly_Recurisively(Head);
+
+	return 0;
+}
