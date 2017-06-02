@@ -1,0 +1,47 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"BinaryTree.h"
+using namespace std;
+
+//面试题59-面试题二-队列的最大值
+//思路：建立两个私有成员变量 其中一个是栈，为了保存最大值
+
+template<typename T>
+class QueueWithMax {
+private:
+	queue<T> Queue;
+	stack<T> sMax;
+	
+public:
+	void push_back(T Node) {
+		Queue.push(Node);
+		if (sMax.empty())
+			sMax.push(Node);
+		else {
+			if (sMax.top() < Node)
+				sMax.push(Node);
+			else
+				sMax.push(sMax.top());
+		}
+	}
+	void pop_front() {
+		if (Queue.empty())
+			throw new exception("queue is empty");
+		sMax.pop();
+		Queue.pop();
+	}
+	T max() {
+		if(Queue.empty())
+			throw new exception("queue is empty");
+		return sMax.top();
+	}
+};
