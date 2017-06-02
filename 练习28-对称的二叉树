@@ -1,0 +1,79 @@
+#include <cstdio>
+#include <memory>
+#include<iostream>
+#include<vector>
+using namespace std;
+/*---------------------------书上给的参考，很给力-----------------------------
+bool isSymmetrical(BinaryTreeNode *pRoot) {
+	return isSymmetrical(pRoot->m_pLeft, pRoot->m_pRight);
+}
+bool isSymmetrical(BinaryTreeNode*pRoot1, BinaryTreeNode*pRoot2) {
+	if (pRoot1 == nullptr&&pRoot2 == nullptr)
+		return true;
+	if (pRoot1 == nullptr || pRoot2 == nullptr)
+		return false;
+	if (pRoot1->m_nValue == pRoot2->m_nValue)
+		return isSymmetrical(pRoot1->m_pLeft, pRoot2->m_pRight) && isSymmetrical(pRoot1->m_pRight, pRoot2->m_pLeft);
+	return false;
+}
+*/
+
+struct BinaryTreeNode {
+	int m_nValue;
+	BinaryTreeNode*m_pLeft;
+	BinaryTreeNode*m_pRight;
+	BinaryTreeNode(int m_nValue) {
+		this->m_nValue = m_nValue;
+		m_pLeft = nullptr;
+		m_pRight = nullptr;
+	}
+};
+
+void ImageChange(BinaryTreeNode*pRoot);
+bool CheckSameCore(BinaryTreeNode*pRoot1, BinaryTreeNode*pRoot2);
+bool CheckSame(BinaryTreeNode*pRoot) {
+	if (pRoot->m_pLeft == nullptr&&pRoot->m_pRight == nullptr)
+		return true;
+	else if (pRoot->m_pLeft == nullptr&&pRoot->m_pRight != nullptr)
+		return false;
+	else if (pRoot->m_pLeft != nullptr&&pRoot->m_pRight == nullptr)
+		return false;
+	ImageChange(pRoot->m_pLeft);
+	return CheckSameCore(pRoot->m_pLeft, pRoot->m_pRight);
+}
+void ImageChange(BinaryTreeNode*pRoot) {
+	if (pRoot == nullptr) {
+		return;
+	}
+	BinaryTreeNode*temp;
+	temp = pRoot->m_pLeft;
+	pRoot->m_pLeft = pRoot->m_pRight;
+	pRoot->m_pRight = temp;
+	ImageChange(pRoot->m_pLeft);
+	ImageChange(pRoot->m_pRight);
+
+}
+bool CheckSameCore(BinaryTreeNode*pRoot1, BinaryTreeNode*pRoot2) {
+	if (pRoot1 == nullptr&&pRoot2 == nullptr) 
+		return true;
+	else if (pRoot1 == nullptr&&pRoot2 != nullptr)
+		return false;
+	else if (pRoot1 == nullptr&&pRoot2 != nullptr)
+		return false;
+	if (pRoot1->m_nValue == pRoot2->m_nValue) 
+		return CheckSameCore(pRoot1->m_pLeft, pRoot2->m_pLeft)&&
+			   CheckSameCore(pRoot1->m_pRight, pRoot2->m_pRight);	
+	return false;
+}
+int main() {
+	BinaryTreeNode*pRoot = new BinaryTreeNode(8);
+	pRoot->m_pLeft = new BinaryTreeNode(6);
+	pRoot->m_pRight = new BinaryTreeNode(6);
+	pRoot->m_pLeft->m_pLeft = new BinaryTreeNode(5);
+	pRoot->m_pLeft->m_pRight = new BinaryTreeNode(7);
+	pRoot->m_pRight->m_pLeft = new BinaryTreeNode(7);
+	pRoot->m_pRight->m_pRight = new BinaryTreeNode(5);
+	bool same = CheckSame(pRoot);
+	
+	return 0;
+}
