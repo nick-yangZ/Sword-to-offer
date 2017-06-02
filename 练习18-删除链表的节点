@@ -1,0 +1,44 @@
+#include <cstdio>
+#include <memory>
+#include<iostream>
+using namespace std;
+
+struct ListNode {
+	int m_nValue;
+	ListNode*m_pNext;
+};
+
+void DeleteNode(ListNode**pListHead, ListNode*pToBeDeleted) {
+	if ((*pListHead)==nullptr&&pToBeDeleted == nullptr) {
+		return;
+	}
+	ListNode *pNode= *pListHead;
+	while(pNode->m_pNext != pToBeDeleted) {
+		pNode = pNode->m_pNext;
+	}
+	pNode->m_pNext = pToBeDeleted->m_pNext;
+	delete pToBeDeleted;
+	                             
+}
+void Deletenode_improve(ListNode**pListHead, ListNode*pToBeDeleted) {
+	if ((*pListHead) == nullptr&&pToBeDeleted==nullptr) {
+		return;
+	}
+	
+	if (pToBeDeleted == *pListHead) {
+		(*pListHead) = (*pListHead)->m_pNext;
+		delete pToBeDeleted;
+		pToBeDeleted = nullptr;
+		return;
+	}
+	if (pToBeDeleted->m_pNext == nullptr) {
+		delete pToBeDeleted;
+		pToBeDeleted = nullptr;
+		return;
+	}
+	ListNode *pToBeDeleted_instead = pToBeDeleted->m_pNext;
+	pToBeDeleted->m_nValue = pToBeDeleted_instead->m_nValue;
+	pToBeDeleted->m_pNext = pToBeDeleted_instead->m_pNext;
+	delete pToBeDeleted_instead;
+}
+
