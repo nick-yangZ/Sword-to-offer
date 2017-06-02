@@ -1,0 +1,91 @@
+#include <cstdio>
+#include <memory>
+#include<iostream>
+#include<vector>
+using namespace std;
+
+struct BinaryTreeNode {
+	double m_dbValue;
+	BinaryTreeNode *m_pLeft;
+	BinaryTreeNode *m_pRight;
+	BinaryTreeNode(int m_dbValue) {
+		this->m_dbValue = m_dbValue;
+		m_pLeft = nullptr;
+		m_pRight = nullptr;
+	}
+};
+void FindBRoot(BinaryTreeNode*pRootA, BinaryTreeNode*pRootB, vector<BinaryTreeNode*> &vcSameValue);
+bool MatchBinaryTreeCore(BinaryTreeNode*pPartRootA, BinaryTreeNode*pRootB);
+bool MatchBinaryTree(BinaryTreeNode*pRootA, BinaryTreeNode*pRootB);
+bool DoubleEqual(double a,double b) {//这个double的比较一开始出错了，导致之后的步骤出错。
+	if (a - b > -0.0000001&&a-b<0.0000001)
+		return true;
+	else
+		return false;
+}
+
+bool MatchBinaryTree(BinaryTreeNode*pRootA, BinaryTreeNode*pRootB) {
+	if (pRootA == nullptr&&pRootB == nullptr)
+		return true;
+	else if (pRootA == nullptr&&pRootB != nullptr)
+		return false;
+	else if (pRootB == nullptr) {
+		return true;
+	}
+	vector<BinaryTreeNode*> vcSameValue;
+	FindBRoot(pRootA, pRootB, vcSameValue);
+	for (unsigned int i = 0; i < vcSameValue.size(); i++) {
+		if (MatchBinaryTreeCore(vcSameValue[i],pRootB))
+			return true;
+	}
+	return false;
+
+}
+
+void FindBRoot(BinaryTreeNode*pRootA, BinaryTreeNode*pRootB, vector<BinaryTreeNode*> &vcSameValue) {
+	
+	if (DoubleEqual(pRootA->m_dbValue,pRootB->m_dbValue)) {
+		vcSameValue.push_back(pRootA);
+	}
+	if (pRootA->m_pLeft != nullptr) {
+		FindBRoot(pRootA->m_pLeft, pRootB,vcSameValue);
+	}
+	if (pRootA->m_pRight != nullptr) {
+		FindBRoot(pRootA->m_pRight, pRootB,vcSameValue);
+	}
+}
+
+bool MatchBinaryTreeCore(BinaryTreeNode*pPartRootA, BinaryTreeNode*pRootB) {
+	bool match=false;
+	if (pRootB == nullptr)
+		return true;
+	if (pPartRootA == nullptr)//这一步很重要，如果树A的值为空，而数B在此节点有值，那么，就是不匹配。如果不写
+		return false;			//这一步，且此时正好A目前节点为空，那下面的pPartRootA->m_dbValue就会造成内存错误。
+		
+	if (!DoubleEqual(pPartRootA->m_dbValue, pRootB->m_dbValue))
+		return false;
+	match = MatchBinaryTreeCore(pPartRootA->m_pLeft, pRootB->m_pLeft) &&
+		MatchBinaryTreeCore(pPartRootA->m_pRight, pRootB->m_pRight);
+		
+	return match;
+}
+
+int main() {
+	BinaryTreeNode *pRootA=new BinaryTreeNode(8),*pNode,*pRootB=new BinaryTreeNode(8);
+	pRootA->m_pLeft = new BinaryTreeNode(8);
+	pRootA->m_pRight = new BinaryTreeNode(7);
+	pNode = pRootA->m_pLeft;
+	
+	pNode->m_pRight = new BinaryTreeNode(2);
+	pNode = pNode->m_pRight;
+	pNode->m_pLeft = new BinaryTreeNode(4);
+	pNode->m_pRight = new BinaryTreeNode(7);
+	pRootB->m_pLeft = new BinaryTreeNode(9);
+	pRootB->m_pRight = new BinaryTreeNode(2);
+	pRootB->m_pRight->m_pRight = new BinaryTreeNode(8);
+	bool result=false;
+	result = MatchBinaryTree(pRootA, pRootB);
+
+	return 0;
+	
+}
