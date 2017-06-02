@@ -1,0 +1,62 @@
+#include <cstdio>
+#include <memory>
+#include<iostream>
+#include<vector>
+using namespace std;
+
+struct ListNode {
+	int m_nkey;
+	ListNode*m_pNext;
+
+
+};
+
+ListNode *MergeListNode(ListNode*pHead1, ListNode *pHead2) {
+
+	ListNode *pHead3 = new ListNode;
+	pHead3->m_pNext = nullptr;
+	ListNode *pNode = pHead3;
+	while (pHead1 != nullptr&&pHead2 != nullptr) {
+		if (pHead1->m_nkey >= pHead2->m_nkey) {
+			pNode->m_pNext = pHead2;
+			pHead2 = pHead2->m_pNext;
+		}
+		else {
+			pNode->m_pNext = pHead1;
+			pHead1 = pHead1->m_pNext;
+		}
+		pNode = pNode->m_pNext;
+	}
+	if (pHead1 == nullptr)
+		pNode->m_pNext = pHead2;
+	else
+		pNode->m_pNext = pHead1;
+	return pHead3->m_pNext;
+}
+int main() {
+	ListNode *pHead1 = nullptr;
+	ListNode *pHead2 = nullptr;
+	ListNode *pMerge = nullptr;
+	pMerge=MergeListNode(pHead1, pHead2);
+	ListNode p1, p3, p5, p7, p2, p4, p6, p8;
+	p1.m_nkey = 1;
+	p2.m_nkey = 2;
+	p3.m_nkey = 3;
+	p4.m_nkey = 4;
+	p5.m_nkey = 5;
+	p6.m_nkey = 6;
+	p7.m_nkey = 7;
+	p8.m_nkey = 8;
+	p1.m_pNext = &p3;
+	p2.m_pNext = &p4;
+	p3.m_pNext = &p5;
+	
+	p5.m_pNext = &p7;
+	
+	p7.m_pNext = nullptr;
+	p4.m_pNext = nullptr;
+	pHead1 = &p1;
+	pHead2 = &p2;
+	pMerge = MergeListNode(pHead1, pHead2);
+	return 0;
+}
