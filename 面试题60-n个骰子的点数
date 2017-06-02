@@ -1,0 +1,51 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"BinaryTree.h"
+using namespace std;
+
+//面试题60-n个骰子的点数
+//思路：将n个色子分为1和n-1
+void GetTheTimes(int nNumberOfS, int *&nEmergeTimes, int nPointSum, int nNumberOfSLeft);
+void GetTheIndex(int NumberOfS,double *pIndex) {
+	if (NumberOfS <= 0 || pIndex == nullptr)
+		return;
+	int *TheTimePointArray = new int[5 * NumberOfS + 1];
+	for (int i = 0; i < 5 * NumberOfS + 1; i++)
+		TheTimePointArray[i] = 0;
+	int nPointSum = 0;
+	GetTheTimes(NumberOfS, TheTimePointArray, 0,NumberOfS);
+	for (int i = 0; i < 5 * NumberOfS + 1; i++)
+		nPointSum += TheTimePointArray[i];
+	for (int i = 0; i < 5 * NumberOfS + 1; i++) {
+		pIndex[i] = (double)TheTimePointArray[i] / (double)nPointSum;
+	}
+}
+void GetTheTimes(int nNumberOfS, int *&nEmergeTimes,int nPointSum,int nNumberOfSLeft) {
+	if (nNumberOfS <= 0 || nEmergeTimes == nullptr||nPointSum>6* nNumberOfS)
+		return;
+	if (nNumberOfSLeft == 1) {
+		for (int i = 1; i <= 6; i++) {
+			nEmergeTimes[nPointSum- nNumberOfS+i]++;
+		}
+		return;
+	}
+	for (int i = 1; i <= 6; i++) {
+		GetTheTimes(nNumberOfS, nEmergeTimes,nPointSum+i, nNumberOfSLeft - 1);
+	}
+}
+
+int main() {
+	double Index[21];
+	GetTheIndex(4, Index);
+	return 0;
+	
+}
