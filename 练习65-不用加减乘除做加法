@@ -1,0 +1,26 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"ListNode.h"
+using namespace std;
+
+//面试题65-不用加减乘除做加法
+//通过先(a&b)<<1|a^b得出结果。
+
+int GetSum(int a, int b) {
+
+	return ((a&b) << 1) | (a^b);
+}
+
+int main() {
+	GetSum(10, 300);
+	return 0;
+}
