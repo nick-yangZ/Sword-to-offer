@@ -1,0 +1,41 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<vector>
+#include "BinaryTree.h"
+using namespace std;
+//在数字序列中找到第n位的数字
+//0~9,10位 10~99,90*2=180位 100~999,900*3=2700 1000~9999,9000*4=36000位。
+
+int FindNumberInNumberSeq(int n) {
+	if (n < 0) {
+		cout << "Invalid number" << endl;
+		return 0;
+	}
+	n++;
+	int nDigitalNumber = 1;
+	while (n > 0) {
+		if (nDigitalNumber == 1) {
+			n -= 10;
+			nDigitalNumber++;
+			continue;
+		}
+		n -= nDigitalNumber * 9 * (int)pow(10, nDigitalNumber - 1);
+		nDigitalNumber++;
+	}
+	nDigitalNumber--;
+	int m = -n;
+	int nIsAskedNumber = (int)pow(10, nDigitalNumber) - 1 - m / nDigitalNumber;
+	char cIsAskedNumber[50];
+	itoa(nIsAskedNumber, cIsAskedNumber, 10);
+	
+	return cIsAskedNumber[nDigitalNumber - m%nDigitalNumber-1 ] - '0';
+
+}
+
+int main() {
+	int m = 1002;
+	FindNumberInNumberSeq(m);
+
+	return 0;
+}
