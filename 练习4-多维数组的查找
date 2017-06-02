@@ -1,0 +1,73 @@
+#include<iostream>
+using namespace std;
+#define h 4
+#define l 4
+
+
+
+
+/*bool find(int p[][l], int i, int j,int f,int &p_h,int& p_l) {
+	int m = j - 1, n = 0;
+	
+	for (m; m >= 0; m--) {
+		
+		if (f == p[n][m]) {
+			p_h = n, p_l = m;
+			return true;
+			
+		}
+		else if(f>p[n][m])//查找的数比当前数大，就往下找，
+		{
+			for (n; n < j; ++n) {
+				if (f == p[n][m]) {
+					p_h = n, p_l = m;
+					return true;
+
+				}
+
+				else if (f < p[n][m])//查找的数比当前的数下，往左找，
+					break;
+			}
+		}
+			
+		
+	
+
+	}
+	return false;
+}
+*/
+
+bool find(int p[][l], int rows, int columns, int number, int &p_r, int& p_c) {
+	if (p == NULL || rows < 0 || columns < 0) {
+		return false;
+	}
+	int row = 0, column = columns - 1;
+	while (row<rows&&column>=0)
+	{
+		if (number == p[row][column]) {
+			p_r = row;
+			p_c = column;
+			return true;
+		}
+		else if (number > p[row][column]) {
+			row++;
+		}
+		else
+			column--;
+	}
+
+}
+
+
+int main() {
+	int p_h, p_l;
+	int p[h][l] = { {1,2,8,9}, {2,4,9,12} ,{4,7,10,13}, {6,8,11,15} };
+	if (find(p, h, l, 7, p_h, p_l)) {
+		cout << "The number's position is p:" << "[" << p_h << "]" << "[" << p_l << "]";
+
+	}
+	else
+		cout << "There is no equal number";
+	return 0;
+}
