@@ -1,0 +1,76 @@
+#include<iostream>
+#include<stack>
+using namespace std;
+class CQueue
+{
+public:
+	CQueue(void) {};
+	~CQueue(void) {};
+	
+	void appendTail(const int&node);
+	int deletehead();
+private:
+	stack<int>stack1;//负责入队列
+	stack<int>stack2;//负责出队列
+};
+
+void CQueue::appendTail(const int &element) {
+	stack1.push(element);
+}
+int CQueue::deletehead()
+{
+/*	int delete_num;  我的代码太复杂了，如果stack2不为空，在删除的时候只要删除stack2就行了，等到stack2删空了，再把
+						stack1全部放入stack2，并未打乱队列顺序，并不需要将stack2删除后再倒回stack1。
+	int swap;
+	if (stack2.size() != 0) {
+		stack2.emplace();
+	}
+	int stack1_size = stack1.size();
+	for (unsigned int i = 0; i < stack1_size; i++) {
+		swap = stack1.top();
+		stack1.pop();
+		stack2.push(swap);
+
+	}
+	delete_num = stack2.top();
+	stack2.pop();
+	if (stack1.empty() != true) {
+		cout << "wrong" << endl;
+	}
+	else {
+		int stack2_size = stack2.size();
+		for (int j = 0; j < stack2_size; j++) {
+			swap = stack2.top();
+			stack2.pop();
+			stack1.push(swap);
+		}
+	};
+	return delete_num;
+*/
+	int swap,delete_num;
+	if (stack2.empty() == true) {
+		while (stack1.empty != true) {
+			swap = stack1.top();
+			stack1.pop();
+			stack2.push(swap);
+		}
+		
+	}
+	if (stack2.empty == true)
+		throw new exception("queue is empty");
+
+		delete_num = stack2.top();
+		stack2.pop();
+		return delete_num;
+}
+
+int main() {
+	CQueue p;
+	for (int i = 0; i < 5; i++) {
+		p.appendTail(i);
+	}
+	p.appendTail(9);
+	p.deletehead();
+
+ 	return 0;
+}
