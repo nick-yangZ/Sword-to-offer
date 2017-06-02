@@ -1,0 +1,171 @@
+#include<iostream>
+#include<stack>
+using namespace std;
+
+struct Point {
+	char*direction;
+	int position;
+
+};
+char* GetOption(int rows,int cols,int i) {//规划当前节点到底有几个方向可以走。
+	int row = i / rows;
+	int col = i%rows;
+	char*direction=new char[4];
+	strcpy(direction, "UDLR");
+	if (row == 0) {
+		direction[0] = 'T';
+	}
+	else if (row == cols-1) {
+		direction[1] = 'T';
+	}
+	if (col == 0) {
+		direction[2] = 'T';
+	}
+	else if (col == rows-1) {
+		direction[3] = 'T';
+	}
+	return direction;
+
+}
+bool CheckPoint(stack<Point*>pass,int position) {//检查之前这个点有没有出现过。
+	Point *p;
+	
+	for (int i = 0; i < pass.size(); i++) {
+		p = pass.top();
+		if (p->position == position) {
+			return false;
+		}
+		pass.pop();
+	}
+	return true;
+}
+
+void DeleteFatherDirection(stack<Point*> pass,Point* &p_Node,int rows,int cols) {//删除回到父节点的方向。
+	if (pass.empty() == true) {
+		return;
+	}
+	Point*p_Father;
+	p_Father = pass.top();
+	if (p_Father->position == p_Node->position - rows) {//父节点在上方，删除上方选择。
+		(p_Node->direction)[0] = 'T';
+	}
+	else if (p_Father->position == p_Node->position + rows) {//父节点在下方，删除下方选择。
+		(p_Node->direction)[1] = 'T';
+	}
+	else if (p_Father->position == p_Node->position -1) {//父节点在左方，删除左方选择。
+		(p_Node->direction)[2] = 'T';
+	}
+	else if (p_Father->position == p_Node->position + 1) {//父节点在右方，删除右方选择。
+		(p_Node->direction)[3] = 'T';
+	}
+}
+stack<Point*> FindWay(const char*matrix,const int rows,const int cols,const char *str) {
+	stack<Point*> pass;
+	if (matrix == nullptr || str == nullptr || rows <= 0 || cols <= 0) {
+		cout << "Wrong circumustians" << endl;
+		return pass;
+	}
+	int i = 0,j=0;
+	Point *p_Node=nullptr;
+	
+	while (i < rows*cols) {
+		int i_circle = i;//i_circle是为了跟踪走过的点。
+		int i_circle_last = 0;//i_circle_last是为了看pNode是否已经配到下一个点并产生新的Point对象
+							  
+		//if (str[0] == matrix[i])//判断是str第一个字母是否相等，如果相等，j复位为0,这一步骤移到循环中判断pass是否为空
+			//j = 0;			 并且出栈之前执行--133行。	
+
+		while (str[j] != '\0'&&str[0] == matrix[i]) {//这个循环结束的判断是str字符串是否扫描完毕，并且str第一个字母和
+													//matrix的当前字母匹配。	
+				if (i_circle_last != i_circle) {//位置改变，即创建新的Point对象。
+					Point *p_new = new Point();
+					p_Node = p_new;
+					p_Node->position = i_circle;
+					p_Node->direction = GetOption(rows, cols, i_circle);
+					DeleteFatherDirection(pass, p_Node, rows, cols);
+					if (CheckPoint(pass, p_Node->position) == false) {//检查当前节点是否已经在之前出现过了。false为出现过。
+						p_Node = pass.top();
+						j--;
+						continue;
+					}
+					pass.push(p_Node);				
+				}
+				i_circle_last = i_circle;
+				if ((p_Node->direction)[0] == 'U') {
+					p_Node->direction[0] = 'T';
+					if (str[j] == matrix[i_circle - rows]) {
+						i_circle = i_circle - rows;
+						j++;
+						continue;
+					}
+				}
+				if ((p_Node->direction)[1] == 'D') {
+					p_Node->direction[1] = 'T';
+					if (str[j] == matrix[i_circle + rows]) {
+						i_circle = i_circle + rows;
+						j++;
+						continue;
+					}
+				}
+				if ((p_Node->direction)[2] == 'L') {
+					p_Node->direction[2] = 'T';
+					if (str[j] == matrix[i_circle - 1]) {
+						i_circle = i_circle - 1;
+						j++;
+						continue;
+					}
+				}
+				if ((p_Node->direction)[3] == 'R') {
+					p_Node->direction[3] = 'T';
+					if (str[j] == matrix[i_circle + 1]) {
+						i_circle = i_circle + 1;
+						j++;
+						continue;
+					}
+				}
+
+				pass.pop();//如果不是全部匹配，则没发跳出循环，及无法进入上面的判断并且返回pass。
+				if (pass.empty() == true)//开始的匹配不用pass.empty是因为一开始也没有元素，如果在循环判断中添加
+					j = 0;               //这个判断，则要在while之外将初值入栈。
+					break;
+				p_Node = pass.top();				
+				j--;
+			}
+		
+		if (pass.empty() != true) {//退出上面的循环后看看栈是否为空，如果不为空则说明路径入栈完成，返回。
+			return pass;
+		}
+		i++;
+	}
+	return pass;//如果最后所有的matrix的元素全部遍历过之后，仍然没有结果，返回栈。
+}
+
+int main() {
+	char*matrix = "jkdlpsnmkdqf";
+	int rows = 4;
+	int cols = 3;
+	Point *print;
+	char *str = "kds";
+	stack<Point*>result,result_print;
+	result.swap(FindWay(matrix, rows, cols, str));
+	if (result.empty() != true) {
+		Point *temp;
+		int k = result.size();
+		for (int i = 0; i < k; i++) {
+			temp = result.top();
+			result_print.push(temp);
+			result.pop();
+		}
+		result_print.swap(result);
+		cout << "The route is :" << endl;
+		for (int i = 0; i < k; i++) {
+			print = result.top();
+			cout << "(" << print->position / rows+1 << "," << print->position%rows+1 << ")" << endl;
+			result.pop();
+		}
+	}
+
+	return 0;
+}
+
+
