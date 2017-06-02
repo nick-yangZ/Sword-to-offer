@@ -1,0 +1,64 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include"ListNode.h"
+using namespace std;
+
+//面试题53-在排序数组中查找数字
+//解题思路：先用二分法查找数字所在位置，找到后左右扫描，找出所有的数字个数。
+int GetTheEmergeTimesCore(int *pNumarray, int nlength, int nNumPosition, int nNum);
+int GetTheNumPostion(int *pNumArray,int start, int end, int nNum);
+int GetTheEmergeTimes(int *pNumArray,int nlength,int nNum){
+	if (pNumArray == nullptr || nlength <= 0||nNum<pNumArray[0]||nNum>pNumArray[nlength-1])
+		return 0;
+	int count = 0;
+	int nNumPosition = GetTheNumPostion(pNumArray, 0, nlength - 1, nNum);
+	if (nNumPosition == -1)
+		return 0;
+	else
+		count=GetTheEmergeTimesCore(pNumArray, nlength, nNumPosition,nNum);
+	return count;
+
+}
+
+int GetTheNumPostion(int *pNumArray, int start, int end, int nNum) {
+	if (pNumArray == nullptr || nNum<pNumArray[start] || nNum>pNumArray[end]||start<0||end<0||start>end)
+		return -1;
+	int half = (start + end) / 2;
+	int nNumPosition=-1;
+	if (nNum == pNumArray[half])
+		nNumPosition = half;
+	else if (nNum < pNumArray[half])
+		nNumPosition = GetTheNumPostion(pNumArray, start, half - 1, nNum);
+	else
+		nNumPosition = GetTheNumPostion(pNumArray, half + 1, end, nNum);
+	return nNumPosition;	
+}		
+
+int GetTheEmergeTimesCore(int *pNumarray, int nlength, int nNumPosition,int nNum) {
+	int nNode = nNumPosition;
+	int count=0;
+	while (nNode >= 0 && pNumarray[nNode] == nNum) {
+		count++;
+		nNode--;
+	}
+	nNode = nNumPosition + 1;
+	while (nNode < nlength && pNumarray[nNode] == nNum) {
+		count++;
+		nNode++;
+	}
+	return count;
+}
+
+int main() {
+	int pNumArray[] = { 1,2,3,3,3,3,5,6 };
+	int result=GetTheEmergeTimes(pNumArray, 8, 4);
+ 	return 0;
+}
