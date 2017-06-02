@@ -1,0 +1,57 @@
+#include <cstdio>
+#include <fstream>
+#include "BinaryTree.h"
+using namespace std;
+//面试题39-数组中出现次数超过一半的数字
+//解法一利用快速排序法找出此数。
+
+int FindTheMostnumber(int *pHead,int length) {
+	if (pHead == nullptr || length <= 0)
+		return 0;
+	int middle = length >> 1;
+	int temp = pHead[middle];
+	int end = length - 1;
+	pHead[middle] = pHead[end];
+	pHead[end] = temp;
+	int *pDevide=pHead, *pPass= pHead,*pDevideEqual=pHead;
+	while (*pDevide < pHead[end])
+		pDevide++;
+	pDevideEqual = pDevide;
+	while (*pDevideEqual <= pHead[end]&&pDevideEqual<pHead+end)
+		pDevideEqual++;
+	pPass = pDevideEqual;
+	while (pPass < pHead+end) {
+		if (*pPass <= pHead[end]) {
+			temp = *pPass;
+			*pPass = *pDevideEqual;
+			*pDevideEqual = temp;
+			
+			if (*pDevideEqual < pHead[end]) {
+				*pDevideEqual = *pDevide;
+				*pDevide = temp;
+				pDevide++;
+			}
+			pDevideEqual++;
+		}
+		pPass++;
+	}
+	temp = *pDevideEqual;
+	*pDevideEqual = pHead[end];
+	pHead[end] = temp;
+	if (*pDevideEqual == pHead[middle])
+		return *pDevideEqual;
+	else if (*pDevideEqual < pHead[middle])
+		return FindTheMostnumber(pDevideEqual + 1, pPass - pDevideEqual);
+	else if (*pDevide > pHead[middle])
+		return FindTheMostnumber(pHead, pDevide - pHead );
+	return 0;
+}
+
+int main() {
+	int Number[17] = { 1,2,3,4,5,5,5,5,2,5,5,5,5,6,7,8,9 };
+	int nMostNumber=FindTheMostnumber(Number, 17);
+
+	return 0;
+}
+
+
