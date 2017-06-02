@@ -1,0 +1,52 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"BinaryTree.h"
+using namespace std;
+
+//面试题58-翻转字符串
+//思路：先翻转整个句子，再翻转单词
+void Reverse(char *pStart, char *pEnd);
+void ReverseTheSentence(char *pString) {
+	if (pString == nullptr)
+		return;
+	char *pStart = pString;
+	char *pEnd = pString;
+	while (*(pEnd+1) != '\0')
+		++pEnd;
+	Reverse(pStart, pEnd);
+	char *pNode = pStart;
+	while (*pNode != '\0') {
+		if (*(pNode + 1) == ' ') {
+			Reverse(pStart, pNode);
+			pStart=pNode = pNode + 2;
+		}
+		pNode++;
+	}
+}
+void Reverse(char *pStart, char *pEnd) {
+	if (pStart == nullptr || pEnd == nullptr||pStart==pEnd)
+		return;
+	char *pStartNode = pStart, *pEndNode = pEnd;
+	while (pStartNode < pEndNode) {
+		char temp = *pStartNode;
+		*pStartNode = *pEndNode;
+		*pEndNode = temp;
+		pStartNode++;
+		pEndNode--;
+	}
+}
+
+int main() {
+	char pStr[] = "I am a student.";
+	ReverseTheSentence(pStr);
+	return 0;
+}
