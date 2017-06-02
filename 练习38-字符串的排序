@@ -1,0 +1,46 @@
+#include <cstdio>
+#include <fstream>
+#include "BinaryTree.h"
+using namespace std;
+
+void PrintAllTheSerialCore(char*pchar, char*pBegin);
+
+void PrintAllTheSerial(char *pchar) {
+	if (pchar == nullptr) {
+		cout << "Invalid string";
+		return;
+	}
+	PrintAllTheSerialCore(pchar, pchar);
+
+}
+
+void PrintAllTheSerialCore(char*pchar, char*pBegin){
+	if (pchar == nullptr)
+		return;
+	if (*(pBegin+1) == '\0')//
+		cout << pchar << " ";
+	else {
+		char *pCh=pBegin;
+		while (*pCh!= '\0') {
+
+			char temp = *pCh;
+			*pCh = *pBegin;
+			*pBegin = temp;
+ 			PrintAllTheSerialCore(pchar,pBegin+1 );
+
+			temp = *pCh;
+			*pCh = *pBegin;
+			*pBegin = temp;
+			pCh++;
+		}
+	}
+}
+
+int main() {
+	char p[] = "abcde";
+
+	
+	PrintAllTheSerial(p);
+
+	return 0;
+}
