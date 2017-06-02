@@ -1,0 +1,71 @@
+#include <cstdio>
+#include <memory>
+#include<iostream>
+using namespace std;
+
+#include <cstdio>
+
+bool CheckNumber(char *Num) {
+	if (Num == nullptr||*Num=='\0')
+		return false;
+	bool point_true = true, sign_true = true,index_char=false;
+	while (*Num != '\0') {
+		if (*(Num + 1) == '\0')
+			if (!(*Num >= '0'&&*Num <= '9'))
+				return false;
+		if (*Num >= '0'&&*Num <= '9') {
+			Num++;
+			
+			sign_true = false;
+			index_char = true;
+		}
+		else if (*Num == '.') {
+			if (!point_true)
+				return false;
+			Num++;
+ 			point_true = false;
+			sign_true = false;
+			index_char = false;
+		}
+		else if (*Num == '+' || *Num == '-') {
+			if (!sign_true)
+				return false;
+			Num++;
+			point_true = false;
+			sign_true = false;
+			index_char = false;
+
+		}
+		else if (*Num == 'e'||*Num == 'E') {
+			if (index_char == false)
+				return false;
+			Num++;
+			point_true = true;
+			sign_true = true;
+			index_char = false;
+		}
+		else
+			return false;
+	}
+	return true;
+}
+
+void test(char *Num, bool expectedFlag) {
+	if (expectedFlag == CheckNumber(Num))
+		cout << "Pass" << endl;
+	else
+		cout << "FAILED" << endl;
+}
+
+int main() {
+	test("12e", false);
+	test("1a3.14", false);
+	test("1.2.3", false);
+	test("+-5", false);
+	test("12e+5.4",false);
+	test("+100",true);
+	test("5e2", true);
+	test("-123", true);
+	test("3.1416", true);
+	test("-1E-16", true);
+}
