@@ -1,0 +1,35 @@
+#include<cstdio>
+#include"标头.h"
+
+void Test(const char* testName, const StackWithMin <int>&stack, int expected)
+{
+	if (testName = nullptr)
+		printf("%s begins:", testName);
+	if (stack.min() == expected)
+		printf("passed.\n");
+	else
+		printf("Failed.\n");
+}
+
+int main() {
+	
+	StackWithMin<int> stack;
+	int i = 5;
+	
+	stack.push(i);
+	Test("Test1", stack, 3);
+	stack.push(4);
+	Test("Test2", stack, 3);
+	stack.push(2);
+	Test("Test3", stack, 2);
+	stack.push(3);
+	Test("Test4", stack, 2);
+	stack.pop();
+	Test("Test5", stack, 2);
+	stack.pop();
+	Test("Test6", stack, 3);
+	stack.push(0);
+	Test("Test7", stack, 0);
+	int a = stack.min();
+	return 0;
+}
