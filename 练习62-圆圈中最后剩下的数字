@@ -1,0 +1,53 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"ListNode.h"
+using namespace std;
+
+//面试题62-圆圈中最后剩下的数字
+//思路：使用链表解题
+
+
+int TheLeftNumberInCircle(int nCircleNumber,int nNumberDelete) {
+	if (nCircleNumber <= 0)
+		throw new exception("Invaild Circle Number");
+	
+	ListNode*pHead = CreateListNode(0);
+	ListNode*pNode=pHead;
+	ListNode*pNew;
+	for (int i = 1; i < nCircleNumber; i++) {
+		pNew = CreateListNode(i);
+		pNode->m_pNext = pNew;
+		pNode = pNode->m_pNext;
+	}
+	pNode->m_pNext = pHead;
+	pNode = pHead;
+	int i = 1;
+	ListNode*pDelete=nullptr;
+	while (pNode->m_pNext != pNode) {
+		if (i == nNumberDelete - 1) {
+			pDelete = pNode->m_pNext;
+			pNode->m_pNext = pDelete->m_pNext;
+			pNode = pNode->m_pNext;
+			delete pDelete;
+			i = 1;
+			continue;
+		}
+		i++;
+		pNode = pNode->m_pNext;		
+	}
+	return pNode->m_nValue;
+}
+int main() {
+	TheLeftNumberInCircle(5, 3);
+
+	return 0;
+}
