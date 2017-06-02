@@ -1,0 +1,24 @@
+#include<iostream>
+using namespace std;
+
+int Calc_Fibonacci(int i) {
+	int *p=new int[i+1] ;
+	int j = 2;
+	p[0] = 0;
+	p[1] = 1;
+	while (j <=i) {
+		p[j] = p[j - 1] + p[j - 2];
+		j++;
+	}
+	return p[i];
+}
+
+int main() {
+	int p,result;
+	cout << " please enter the fibonacci number" << endl;
+	cin >> p;
+	result = Calc_Fibonacci(p);
+	cout << "The result of f(" << p << ") is: " << result << endl;
+
+	return 0;
+}
