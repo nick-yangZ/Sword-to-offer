@@ -1,0 +1,59 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include"BinaryTree.h"
+using namespace std;
+
+//面试题55-二叉树的深度
+bool IsBalanceBinaryTreeCore(BinaryTreeNode* pRoot, int &TreeDeep);
+bool IsBalanceBinaryTree(BinaryTreeNode *pRoot) {
+	if (pRoot == nullptr)
+		return false;
+	int TreeDeep = 0;
+	return IsBalanceBinaryTreeCore(pRoot, TreeDeep);
+}
+
+bool IsBalanceBinaryTreeCore(BinaryTreeNode* pRoot, int &TreeDeep) {
+	if (pRoot == nullptr)
+		return 0;
+	bool bLeft = true, bRight = true;
+	int LTreeDeep=0,RTreeDeep=0;
+	if (pRoot->m_pLeft == nullptr&&pRoot->m_pRight == nullptr) {
+		TreeDeep = 1;
+		return true;
+	}
+	if (pRoot->m_pLeft != nullptr)
+		bLeft = IsBalanceBinaryTreeCore(pRoot->m_pLeft,LTreeDeep);
+	if (pRoot->m_pRight != nullptr) {
+		bRight = IsBalanceBinaryTreeCore(pRoot->m_pRight,RTreeDeep);
+	}
+	if ((LTreeDeep - RTreeDeep > 1 || LTreeDeep - RTreeDeep < -1)||!bRight||!bLeft)
+		return false;
+
+	TreeDeep = LTreeDeep > RTreeDeep ? LTreeDeep +1 : RTreeDeep +1;
+	return true;
+}
+
+
+int main() {
+	BinaryTreeNode* pNode1 = CreateBinaryTreeNode(1);
+	BinaryTreeNode* pNode2 = CreateBinaryTreeNode(2);
+	BinaryTreeNode* pNode3 = CreateBinaryTreeNode(3);
+	BinaryTreeNode* pNode4 = CreateBinaryTreeNode(4);
+	BinaryTreeNode* pNode5 = CreateBinaryTreeNode(5);
+	BinaryTreeNode* pNode6 = CreateBinaryTreeNode(6);
+	BinaryTreeNode* pNode7 = CreateBinaryTreeNode(7);
+
+	ConnectTreeNodes(pNode1, pNode2, pNode3);
+	ConnectTreeNodes(pNode2, pNode4, pNode5);
+	ConnectTreeNodes(pNode3, pNode6, pNode7);
+	IsBalanceBinaryTree(pNode1);
+	return 0;
+}
