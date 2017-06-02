@@ -1,0 +1,59 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"BinaryTree.h"
+using namespace std;
+
+//面试题60-n个骰子的点数-方法二
+//思路：一个骰子一个骰子的叠加，当前的点数n是上一轮点数n-1~n-6的和。
+void GetThePointTimes(int *PointTimesArray, int nSaizi, int nSaiziNumber = 1);
+void GetThePointIndex(int nSaizi, double *pIndex) {
+	if (nSaizi <= 0, pIndex == nullptr)
+		return;
+	int *PointTimesArray = new int[6 * nSaizi + 1];
+	for (int i = 0; i <= 6 * nSaizi ; i++)
+		PointTimesArray[i] = 0;
+	GetThePointTimes(PointTimesArray, nSaizi);
+	int TotalPointTimes = 0;
+	for (int i = nSaizi; i <= 6 * nSaizi; i++)
+		TotalPointTimes += PointTimesArray[i];
+	for (int i = 0; i < 5 * nSaizi + 1; i++)
+		pIndex[i] =(double) PointTimesArray[i + nSaizi] / (double)TotalPointTimes;
+}
+
+void GetThePointTimes(int *PointTimesArray, int nSaizi, int nSaiziNumber) {
+	int Gap = 0;
+	PointTimesArray[0] = 1;
+	queue<int>SixPoint;
+	SixPoint.push(PointTimesArray[nSaiziNumber - 1]);
+	for (int i = nSaiziNumber; i <= nSaiziNumber * 6; i++) {
+
+		int nLastI = PointTimesArray[i];
+		PointTimesArray[i] = PointTimesArray[i - 1] + Gap;
+		
+		if (SixPoint.size() >= 6) {
+			Gap = nLastI - SixPoint.front();
+			SixPoint.pop();
+		}
+		else
+			Gap = nLastI;
+		SixPoint.push(nLastI);
+	} 
+	if (nSaiziNumber == nSaizi)
+		return;
+	GetThePointTimes(PointTimesArray, nSaizi, nSaiziNumber + 1);
+}
+int main() {
+	double Index[21];
+	GetThePointIndex(4, Index);
+	return 0;
+
+}
