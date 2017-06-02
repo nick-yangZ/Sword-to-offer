@@ -1,0 +1,35 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"ListNode.h"
+using namespace std;
+
+//面试题64-求1+2+3+...+n:要求不可以用for,while,if,else,switch,case等关键字。
+//利用函数指针模拟整个过程
+
+template<unsigned int n> struct Sum
+{
+	enum Value  { N = Sum<n - 1>::N + n ,blue};//枚举值是一个类型名，这个类型的变量只能设置成花括号里面的值；
+	Value s=N;
+
+};
+
+template<>struct Sum<1>
+{
+	enum Value{N=1};
+
+};
+
+int main() {
+	Sum<10> a;
+	int b=a.s;
+	return 0;
+}
