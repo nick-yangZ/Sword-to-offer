@@ -1,0 +1,41 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<stack>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include "BinaryTree.h"
+using namespace std;
+void CollectMostValueGiftCore(int *pNumberGift, int rows, int cols, int row, int col, int TotalGiftValue, int &FinalValue);
+int CollectMostValueGift(int *pNumberGift,int rows,int cols) {//rows表示的是一行有几个元素，cols表示一列有几个元素。
+	if (pNumberGift == nullptr || rows <= 0 || cols <= 0) 
+		return 0;
+
+	int TotalGiftValue=0;
+	int FinalValue = 0;
+	CollectMostValueGiftCore(pNumberGift, rows,cols,0,0,TotalGiftValue,FinalValue);
+
+	return FinalValue;
+}
+
+void CollectMostValueGiftCore(int *pNumberGift, int rows, int cols,int row,int col,int TotalGiftValue,int &FinalValue) {
+	if (pNumberGift == nullptr || rows <= 0 || cols <= 0 || TotalGiftValue < 0)
+		return;
+	TotalGiftValue += pNumberGift[row*rows + col];
+	if (row == rows - 1 && col == cols - 1) {
+		if (TotalGiftValue > FinalValue)
+			FinalValue = TotalGiftValue;
+	}
+	if (row + 1 < rows)
+		CollectMostValueGiftCore(pNumberGift, rows, cols, row + 1, col, TotalGiftValue,FinalValue);
+	if (col + 1 < cols)
+		CollectMostValueGiftCore(pNumberGift, rows, cols, row, col + 1, TotalGiftValue,FinalValue);
+}
+
+int main() {
+ 	int nGiftArray[16] = { 1,10,3,8,12,2,9,6,5,7,4,11,3,7,16,5 };
+	int result =CollectMostValueGift(nGiftArray, 4, 4);
+
+	return 0;
+}
