@@ -1,0 +1,104 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<stack>
+#include<vector>
+#include "BinaryTree.h"
+using namespace std;
+//在数字序列中找到第n位的数字
+//0~9,10位 10~99,90*2=180位 100~999,900*3=2700 1000~9999,9000*4=36000位。
+bool OrderTwoNumber(int nNum1, int nNum2);
+void swapElem(int *elem1, int *elem2);
+int Partition(int a[], int len, int start, int end);
+void QuickSort(int a[], int len, int start, int end);
+bool OrderTwoNumber(int nNum1, int nNum2);
+void ManageTheOrderAndPrint(int *pArray, int length);
+int RandomInRange(int start, int end) {
+	srand(time(NULL));
+	return start + rand() % (end - start + 1);
+}
+void swapElem(int *elem1, int *elem2) {
+	int temp = *elem1;
+	*elem1 = *elem2;
+	*elem2 = temp;
+}
+int Partition(int a[], int len, int start, int end) {
+	if (a == nullptr || len < 0 || start < 0 || end < 0) {
+		cout << "Wrong number arry" << endl;
+	}
+	int index = RandomInRange(start, end);
+	swapElem(&a[index], &a[end]);
+	int small = start - 1;
+	for (index = start; index < end; index++) {
+		if (OrderTwoNumber(a[index] , a[end])) {
+			small++;
+			if (small != index) { 
+				swapElem(&a[small + 1], &a[index]);
+			}
+		}
+	}
+	small++;
+	swapElem(&a[small], &a[end]);
+	return small;
+}
+void QuickSort(int a[], int len, int start, int end) {
+	if (a == nullptr || len < 0 || start < 0 || end < 0) {
+		cout << "Wrong number arry" << endl;
+	}
+	if (start == end)
+		return ;
+	int index = Partition(a, len, start, end);
+	if (index > start) {
+		QuickSort(a, index - start, start, index - 1);
+	}
+	if (index < end) {
+		Partition(a, end - index, index + 1, end);
+	}
+}
+
+bool OrderTwoNumber(int nNum1, int nNum2) {
+	char cNum1[50];
+	char cNum2[50];
+	_itoa(nNum1, cNum1, 10);
+	_itoa(nNum2, cNum2, 10);
+	int i = 0;
+	bool LeftSmallerThanRight=false;
+	while (cNum1[i] == '\0'&&cNum2[i] == '\0') {
+		if (cNum1[i] == '\0'&&cNum2[i] == '\0')
+			return LeftSmallerThanRight;
+		else if (cNum1[i] == '\0'&&cNum2 != 0) {
+			cNum1[i] = cNum1[0];
+			cNum1[i + 1] = '\0';
+		}
+		else if (cNum2[i] == '\0'&&cNum1 != 0) {
+			cNum2[i] = cNum2[0];
+			cNum2[i + 1] = '\0';
+		}
+		if (cNum1[i] < cNum2[i]) {
+			LeftSmallerThanRight=true;
+		}
+		else
+			LeftSmallerThanRight = false;
+		i++;
+	}
+	return LeftSmallerThanRight;
+}
+
+void ManageTheOrderAndPrint(int *pArray, int length) {
+	if (pArray == nullptr || length <= 0) {
+		cout << "Invalid Array" << endl;
+		return;
+	}
+	QuickSort(pArray, length,0,length-1);
+	for (int i = 0; i < length; i++) {
+		cout << pArray[i];
+
+	}
+}
+
+int main() {
+	int nArray[] = { 3,323,32123 };
+	ManageTheOrderAndPrint(nArray, 3);
+
+	return 0;
+}
