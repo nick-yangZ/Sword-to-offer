@@ -1,0 +1,32 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"ListNode.h"
+using namespace std;
+
+//面试题64-求1+2+3+...+n:要求不可以用for,while,if,else,switch,case等关键字。
+//利用函数指针模拟整个过程
+
+typedef unsigned int(*Fun)(unsigned int);
+unsigned int StopTheCircle(unsigned int n);
+unsigned int CirclePlus(unsigned int n);
+Fun fun[2] = { StopTheCircle,CirclePlus };
+unsigned int StopTheCircle(unsigned int n) {
+	return 0;
+}
+unsigned int CirclePlus(unsigned int n) {
+	return fun[!!n](n - 1)+n;
+}
+
+int main() {
+	CirclePlus(10);
+	return 0;
+}
