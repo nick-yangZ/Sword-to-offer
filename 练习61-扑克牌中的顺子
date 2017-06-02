@@ -1,0 +1,56 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"BinaryTree.h"
+using namespace std;
+
+//面试题61-扑克牌中的顺子
+//解题思路：题目的5张牌是给定的，只需要判断是否是顺子。先用快速排序，排好序后，统计	其中大小王的个数，再统计牌中间间隔数，
+//若是间隔数大于0的个数，即为不连续，即不是顺子，反之，是顺子。
+int Compare(const void*p1, const void *p2);
+bool IsStraight(int *pPoker, int length) {
+	if (pPoker == nullptr || length <= 0)
+		return false;
+	int *pPokerCopy = new int[length];
+	for (int i = 0; i < length; i++)
+		pPokerCopy[i] = pPoker[i];
+	qsort(pPokerCopy, length, sizeof(int), Compare);
+	int nZeroNumber = 0;
+	int nSpaceNumber = 0;
+	for (int i = 0; i < length; i++)
+		if (pPokerCopy[i] == 0)
+			nZeroNumber++;
+		else
+			break;
+	int small = nZeroNumber ;
+	int big = small + 1;
+	while (big < length) {
+		if (pPokerCopy[small] == pPokerCopy[big])
+			return false;
+		nSpaceNumber += pPokerCopy[big] - pPokerCopy[small] - 1;
+		big++;
+		small++;
+	}
+	if (nSpaceNumber > nZeroNumber)
+		return false;
+	else
+		return true;
+}
+int Compare(const void*p1,const void *p2) {
+	return *(int*)p1 - *(int*)p2;
+}
+
+int main() {
+	int nNumArray[] = { 1,3,7,0,5 };
+	IsStraight(nNumArray, 5);
+	return 0;
+
+}
