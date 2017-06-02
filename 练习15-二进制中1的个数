@@ -1,0 +1,37 @@
+#include<iostream>
+using namespace std;
+
+int NumberOf1(int n) {
+	int count = 0;
+	unsigned int flag = 1;
+	while (flag)
+	{
+		if (n&flag)
+			count++;
+		flag = flag << 1;
+		
+	}
+	return count;
+}
+
+int NumberOf2(int n) {
+	int count = 0;
+	while (n) {
+		n=n&(n - 1);
+		count++;
+	}
+	return count;
+}
+
+
+int main() {
+	int count=NumberOf1(1);
+	int count2 = NumberOf2(3);
+	double a=15.75;
+	double b = 0.0075;
+	int c = 7;
+	return 0;
+
+
+}
+
