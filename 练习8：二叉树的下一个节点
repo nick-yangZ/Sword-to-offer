@@ -1,0 +1,102 @@
+#include<iostream>
+using namespace std;
+
+struct Binary_tree {
+
+	int value;
+	Binary_tree *left_son;
+	Binary_tree *right_son;
+	Binary_tree *father;
+
+	Binary_tree(int i) {
+		left_son = right_son =father=nullptr;
+		value = i;
+	}
+};
+
+Binary_tree * Next_Point(Binary_tree *pNode) {
+	if (pNode == nullptr) {
+		cout << "Invalid binary tree" << endl;
+		return nullptr;
+	}
+	
+	else
+	{
+		if (pNode->left_son == nullptr&&pNode->right_son == nullptr) {//当给定节点为叶节点的时候
+			if (pNode == pNode->father->left_son) {//给定节点为左侧叶节点。
+				return pNode->father;
+			}
+			if (pNode == pNode->father->right_son) {//给定节点为右侧叶节点。需要一直向上找到它作为左儿子的父节点，并输出。
+				
+				while (pNode == pNode->father->right_son) {
+					pNode = pNode->father;
+					if (pNode->father == nullptr) {//如果向上回溯的过程中，发现他没有父节点，说明给定节点是最后节点。
+						cout << "此节点为最后节点，它没有下一节点" << endl;
+						return nullptr;
+					}
+				}
+				return pNode->father;
+			}
+		}
+		else
+		{
+			pNode = pNode->right_son;
+			while (pNode->left_son!=nullptr)
+			{
+				pNode = pNode->left_son;
+			}
+			return pNode;
+		}
+	}
+}
+
+void Inorder_recursion(Binary_tree *root,Binary_tree *&p) {
+	if (root == nullptr) {
+		cout << "Invalid binary tree" << endl;
+		return;
+	}
+	if (root->left_son != nullptr) {
+		Inorder_recursion(root->left_son,p);
+	}
+	if (root->value == 31) {
+		p = root;
+	}
+	cout << root->value<<" ";
+	if (root->right_son != nullptr) {
+		Inorder_recursion(root->right_son,p);
+	}
+}
+Binary_tree* Create(int i, Binary_tree *root = nullptr) {
+
+	if (i==0) {
+		return nullptr;
+	}
+	static int p = 1;
+	Binary_tree *self = new Binary_tree(p);
+	p++;
+	i--;
+	self->left_son = Create(i,self );
+	self->right_son = Create(i,self);
+	self->father = root;
+	return self;
+}
+
+int main() {
+	Binary_tree *p1=new Binary_tree(1);
+	Binary_tree *p2,*get,*pNext;
+	p2=Create(5);
+	Inorder_recursion(p2,get);
+	cout << endl;
+	pNext=Next_Point(get);
+	Inorder_recursion(p2);
+	if (pNext != nullptr) {
+		cout << pNext->value;
+	}
+	return 0;
+}
+
+
+
+
+
+
