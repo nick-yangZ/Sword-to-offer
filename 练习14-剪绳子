@@ -1,0 +1,45 @@
+#include<iostream>
+using namespace std;
+
+int maxProductAfterCutting_solution1(int length) {
+	if (length == 0) {
+		return 0;
+	}
+	if (length == 1) {
+		return 0;
+	}
+	if (length == 2) {
+		return 1;
+	}
+	if (length == 3) {
+		return 2;
+	}
+	int*product=new int[length+1];
+	product[0] = 0;
+	product[1] = 1;
+	product[2] = 2;
+	product[3] = 3;
+	int max;
+	for (int i = 4; i <= length; i++) {//从4以后，就没有数字是比自己的拆分乘积大的，所以都要拆分运算。
+		max = 0;
+		for (int j = 1; j <= i / 2; j++) {
+			if (max < product[j] * product[i - j]) {
+				max = product[j] * product[i - j];
+			}
+		}
+		product[i] = max;
+	}
+	max = product[length];//要将返回值赋给max，然后释放数组，否则会造成数组溢出。
+	delete[]product;//必须手动delete，否则内存资源一直占用。
+	return max;
+
+}
+
+
+
+int main() {
+	int max=maxProductAfterCutting_solution1(5);
+
+	return 0;
+}
+
