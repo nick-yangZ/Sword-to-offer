@@ -1,7 +1,5 @@
 #include<iostream>
 using namespace std;
-
-
 void strconvert(char *p) {
 	if (p == nullptr)
 		return;
@@ -37,13 +35,7 @@ void strconvert(char *p) {
 int main() {
 	char *p = new char[30];
 	strcpy(p, "we are so happy.");
-
-	
-
 	strconvert(p);
-
-	
 	cout << p << endl;
-
 	return 0;
 }
