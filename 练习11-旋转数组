@@ -1,0 +1,71 @@
+#include<iostream>
+using namespace std;
+
+int MidEqualEnd(int a[], int start, int end, int *p_mid) {
+	int i;
+	for (i = start; i < end; i++) {
+		if (a[i] > *p_mid) {
+			return i;
+		}
+		else if (a[i] < *p_mid) {//这条可以成为主要的条件，可以大大缩短运算时间。
+			return i;
+		}
+	}
+	return i;
+}
+void FindMin(int a[],int start,int end,int &p) {
+	if (a == nullptr) {
+		cout << "Wrong array" << endl;
+		return ;
+	}
+	if (a[start] < a[end]) {//特殊情况：从前面移动到后面的数字个数为0，即此数组从头到尾依然是从小到大排序。
+		p = a[start];
+		return;
+	}
+	//标记两个指针分别指向头和尾。
+	if ((end-start)<=1) {
+		p = a[start] >a[end] ? end:start;
+		return;
+	}
+	int *p_start = nullptr , *p_end=nullptr;
+	p_start = &a[start];
+	p_end = &a[end];
+	int *p_mid = p_start+((p_end - p_start) >> 1);
+	
+	if (*p_mid > *p_end) {
+		
+  		FindMin(a, start +( p_mid - p_start), end,p);
+	}
+	else if (*p_mid < *p_end) {
+		
+		FindMin(a, start, end - (p_end - p_mid),p);
+	}
+	else {//特殊情况，中间数和end相等。
+		int i = MidEqualEnd(a, start, end, p_mid);
+		if (a[i] > *p_mid) {
+			FindMin(a, i, start + (p_mid - p_start), p);
+		}
+		else  {
+			p = i;
+			return;
+		}
+		
+	
+	}
+	return ;
+}
+
+
+int main() {
+	int a[10] = { 6,6,6,6,6,1,2,3,4,6 };
+	int b[10] = { 6,6,0,6,6,6,6,6,6,6 };
+	int c[10] = { 6,6,6,6,6,6,6,6,6,6 };
+	int p_a,p_b,p_c;
+	FindMin(a, 0, 9,p_a);
+	FindMin(b, 0, 9, p_b);
+	FindMin(c, 0, 9, p_c);
+	cout << "The mininum number is:a[" << p_a << "]=" << a[p_a] << endl;
+	cout << "The mininum number is:b[" << p_b << "]=" << b[p_b] << endl;
+	cout << "The mininum number is:c[" << p_c << "]=" << c[p_c] << endl;
+	return 0;
+}
