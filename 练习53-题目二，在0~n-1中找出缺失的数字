@@ -1,0 +1,52 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include"ListNode.h"
+using namespace std;
+
+//面试题53-题目二，在0~n-1中找出缺失的数字。
+//解题思路：用二分查找法，看左右两边哪里缺少数字。如果是正常的话，在数组中，数组下标应该和对应数字相等，如果不等，说明
+//前面的数字出了问题，即缺失的数字在下标前面的数字中。
+int GetTheNumPostion(int *pNumArray, int start, int end);
+int GetTheMissNumber(int *pNumArray,int nlength){
+	if (pNumArray == nullptr || nlength <= 0)
+		return 0;
+
+	int nMissNum = GetTheNumPostion(pNumArray, 0, nlength-1);
+	
+	return nMissNum;
+
+}
+
+int GetTheNumPostion(int *pNumArray, int start, int end) {
+	if (pNumArray == nullptr ||start<0||end<0||start>end)
+		return -1;
+	if (start == end) {
+		if (pNumArray[start] == start)
+			return start + 1;
+		else
+			return start;
+	}
+	int half = (start + end) / 2;
+	int nNumPosition=-1;
+	if (pNumArray[half]!=half)
+		nNumPosition = GetTheNumPostion(pNumArray, start, half - 1);
+	else
+		nNumPosition = GetTheNumPostion(pNumArray, half + 1, end);
+	return nNumPosition;	
+
+}		
+
+
+int main() {
+	int pNumArray[] = { 0,1,2,3,4,5,6,7 };
+	int result = GetTheMissNumber(pNumArray, 8);
+ 	return 0;
+}
