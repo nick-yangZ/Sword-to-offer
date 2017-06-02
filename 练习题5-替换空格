@@ -1,0 +1,49 @@
+#include<iostream>
+using namespace std;
+
+
+void strconvert(char *p) {
+	if (p == nullptr)
+		return;
+
+	int num_space = 0;
+	int num_char = 0;
+	int i=0;
+	while (p[i] != '\0') {
+		if (p[i] == ' ') {
+			num_space++;
+		}
+		else
+			num_char++;
+		i++;
+	}
+	int num_NewStr = num_char + num_space *3;
+	int num_New_enter = num_NewStr, num_Ori_enter = num_space+num_char;
+	while (num_New_enter != num_Ori_enter) {
+		if (p[num_Ori_enter] == ' ') {
+			num_Ori_enter--;
+			p[num_New_enter--] = '0';
+			p[num_New_enter--] = '2';
+			p[num_New_enter--] = '%';
+			continue;
+		}
+		p[num_New_enter] =p[num_Ori_enter];
+		num_New_enter--;
+		num_Ori_enter--;
+	}
+
+}
+
+int main() {
+	char *p = new char[30];
+	strcpy(p, "we are so happy.");
+
+	
+
+	strconvert(p);
+
+	
+	cout << p << endl;
+
+	return 0;
+}
