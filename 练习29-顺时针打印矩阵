@@ -1,0 +1,70 @@
+#include <cstdio>
+#include <memory>
+#include<iostream>
+#include<vector>
+using namespace std;
+
+void PrintArray(int *n_pHead,int rows,int cols) {
+	if (n_pHead == nullptr)
+		return;
+	bool *routepass = new bool[rows*cols];
+	memset(routepass, false, rows*cols);
+	int n_TurnDirection=0;
+	int i = 0;
+	int row = 0, col=0;
+	while (routepass[row*rows+col] == false) {
+		if (n_TurnDirection  == 0) {
+		
+			while (routepass[row*rows + col] == false&&col<rows) {
+				cout << n_pHead[row*rows + col] << " ";
+				routepass[row*rows + col] = true;
+				col++;
+			}
+			n_TurnDirection = (n_TurnDirection + 1) % 4;
+			col--;
+			row++;
+		}
+		if (n_TurnDirection == 1&&row<cols) {
+			
+			while (routepass[row*rows + col] == false&&row<cols) {
+				cout << n_pHead[row*rows + col]<<" " ;
+				routepass[row*rows + col] = true;
+				row++;
+			}
+			n_TurnDirection = (n_TurnDirection + 1) % 4;
+			row--;
+			col--;
+		}
+		if (n_TurnDirection == 2&&col>=0) {
+	
+			while (routepass[row*rows + col] == false) {
+				cout << n_pHead[row*rows + col] << " ";
+				routepass[row*rows + col] = true;
+				col--;
+			}
+			n_TurnDirection = (n_TurnDirection + 1) % 4;
+			col++;
+			row--;
+		}
+		if (n_TurnDirection == 3&&row>=0) {
+		
+			while (routepass[row*rows + col] == false) {
+				cout << n_pHead[row*rows + col] << " ";
+				routepass[row*rows + col] = true;
+				row--;
+			}
+			n_TurnDirection = (n_TurnDirection + 1) % 4;
+			row++;
+			col++;
+		}
+	}
+}
+
+int main() {
+	int n_pPrint[20] = { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 };
+	int rows = 4;//一行有三个数
+	int cols = 5;//一列有四个数
+	PrintArray(n_pPrint, rows, cols);
+
+	return 0;
+}
