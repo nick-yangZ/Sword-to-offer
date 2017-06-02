@@ -1,0 +1,58 @@
+#include <cstdio>
+#include <memory>
+#include<iostream>
+#include<vector>
+using namespace std;
+
+struct ListNode {
+	int m_nkey;
+	ListNode*m_pNext;
+	ListNode(int n) {
+		m_nkey = n;
+		m_pNext = nullptr;
+	}
+};
+
+
+void ReversalListNode(ListNode**pHead) {
+	if (*pHead == nullptr) {
+		cout << "Invalid Listnode" << endl;
+		return;
+	}
+	if ((*pHead)->m_pNext == nullptr)
+		return;
+
+	ListNode *pNode = *pHead;
+	ListNode *pNodeNext1=pNode->m_pNext;
+	ListNode *pNodeNext2 = pNode->m_pNext->m_pNext;
+	while (pNodeNext2 != nullptr) {
+		pNodeNext1->m_pNext = pNode;
+		pNode = pNodeNext1;
+		pNodeNext1 = pNodeNext2;
+		pNodeNext2 = pNodeNext2->m_pNext;
+	}
+	(*pHead)->m_pNext = nullptr;
+	pNodeNext1->m_pNext = pNode;
+	*pHead = pNodeNext1;
+	
+}
+
+int main() {
+	ListNode *p1=new ListNode(1);
+	ListNode *pNew = nullptr;
+	ListNode *pNode = p1;
+	for (int i = 2; i < 7; i++) {
+		pNew = new ListNode(i);
+		pNode->m_pNext = pNew;
+		pNode = pNode->m_pNext;
+	}
+	ListNode*p2 = nullptr;
+	ListNode*p3 = new ListNode(3);
+	ListNode*p4 = new ListNode(4);
+	p4->m_pNext = p3;
+	ReversalListNode(&p1);
+	ReversalListNode(&p2);
+	ReversalListNode(&p3);
+	ReversalListNode(&p4);
+	return 0;
+}
