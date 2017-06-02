@@ -1,0 +1,40 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"ListNode.h"
+using namespace std;
+
+//面试题66-构建乘积数组
+//原题不让用除法，可以将所有乘数分为两组来实现功能。
+void Multiply(const vector<double>&array1, vector<double>&array2) {
+	if (array1.empty()) {
+		array2.clear();
+		return;
+	}
+	int length = array1.size();
+	array2.push_back(1);
+	for (int i = 1; i < length; i++) {
+		array2.push_back(array2[i - 1] * array1[i - 1]);
+	}
+	int temp = 1;
+	for (int i = length - 2; i >= 0; i--) {
+		temp *= array1[i + 1];
+		array2[i] *= temp;
+	}
+}
+int main() {
+	vector<double> array1 = { 1,2,3,4,0,6 };
+	vector<double> array2;
+	Multiply(array1, array2);
+	
+	return 0;
+
+}
