@@ -1,0 +1,83 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+using namespace std;
+//面试题51-数组中的逆序对
+//思路简析：使用归并排序的思想，先对子数组排序并统计，返回父数组，父数组对两个子数组再进行统计并将结果录入辅助数组。
+//实验分析：使用new int的话会多分配4字节，初始化为fdfdfdfd，当delete的时候会被变成cd。使用delete只能将建立的空间全部删除
+//而不可以从中间删除，会报错，无论加不加[],都是全删除。另外new和delete成对出现。
+int* CountTheConversePairCore(int *pHead, int length, unsigned int &count);
+int CountTheConversePair(int *pNum, int length) {
+	if (pNum == nullptr&&length <= 0)
+		return 0;
+	unsigned int count = 0;
+	int *pAsist = CountTheConversePairCore(pNum, length, count);
+	if (length != 1)
+		delete pAsist;
+	return count;
+}
+
+
+int* CountTheConversePairCore(int *pHead, int length, unsigned int &count) {
+	if (pHead == nullptr || length <= 0 || count < 0) {
+		return nullptr;
+	}
+
+	if (length == 1) {
+
+		return pHead;
+	}
+	int*pLeft = nullptr;
+	int *pRight = nullptr;
+	int Leftlength = length / 2;
+	int Rightlength = length - length / 2;
+	if (length > 1) {
+		pLeft = CountTheConversePairCore(pHead, Leftlength, count);
+		pRight = CountTheConversePairCore(pHead + length / 2, Rightlength, count);
+	}
+	int *pAsist = new int[length];
+	int *pLNode = pLeft + Leftlength - 1;
+	int *pRNode = pRight + Rightlength - 1;
+	int *pAsistNode = &pAsist[length - 1];
+	while (pLNode >= pLeft&&pRNode >= pRight) {
+		if (*pLNode > *pRNode) {
+			count += pRNode - pRight + 1;
+			*pAsistNode = *pLNode;
+			pLNode--;
+		}
+		else {
+			*pAsistNode = *pRNode;
+			pRNode--;
+		}
+		pAsistNode--;
+	}
+	while (pRNode >= pRight) {
+		*pAsistNode = *pRNode;
+		pAsistNode--;
+		pRNode--;
+	}
+	while (pLNode >= pLeft) {
+		*pAsistNode = *pLNode;
+		pAsistNode--;
+		pLNode--;
+	}
+	if (Leftlength != 1)
+		delete pLeft;
+	if (Rightlength != 1)
+		delete pRight;
+	return pAsist;
+}
+int main() {
+	int* NumArray = nullptr;
+
+	int result = CountTheConversePair(NumArray, 0);
+
+	return 0;
+}
+
