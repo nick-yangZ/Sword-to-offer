@@ -1,0 +1,51 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include"BinaryTree.h"
+using namespace std;
+int GetTheFirst1FromRight(int a);
+bool TheBitIsOne(int nNum, int RightOne);
+//面试题56-题目一-数组中数字出现的次数
+void GetTwoSingleNumbers(int *pNum, int length, int &nNum1, int &nNum2) {
+	if (pNum == nullptr || length < 0)
+		return;
+	nNum1 = 0, nNum2 = 0;
+	int resultexclusiveOR=pNum[0];
+	for (int i = 1; i < length; i++) {
+		resultexclusiveOR ^= pNum[i];
+	}
+	int First1FromRight = GetTheFirst1FromRight(resultexclusiveOR);
+	for (int j = 0; j < length; j++) {
+		if (TheBitIsOne(pNum[j], First1FromRight))
+			nNum1 ^= pNum[j];
+		else
+			nNum2 ^= pNum[j];
+	}
+}
+int GetTheFirst1FromRight(int a) {//找出从右起第几个二进制位是1；
+	int i = 0;
+	if (!(a & 1) && i < 8 * sizeof(int)) {
+		a >> 1;
+		i++;
+	}
+	return i;
+}
+bool TheBitIsOne(int nNum, int RightOne) {
+	return (nNum >> RightOne)&1;	
+}
+
+
+int main() {
+	int nArray[] = { 2,4,4,3,6,3,9,2,5,5 };
+	int num1, num2;
+	GetTwoSingleNumbers(nArray, 10, num1, num2);
+
+	return 0;
+}
