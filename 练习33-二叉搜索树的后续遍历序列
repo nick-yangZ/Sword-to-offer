@@ -1,0 +1,50 @@
+#include<iostream>
+#include<stack>
+#include<queue>
+static int i = 0;
+struct BinaryTreeNode
+{
+	int m_nValue;
+	BinaryTreeNode *m_pLeft;
+	BinaryTreeNode *m_pRight;
+	BinaryTreeNode(int m_nValue) {
+		this->m_nValue = m_nValue;
+		m_pLeft = nullptr;
+		m_pRight = nullptr;
+	}
+
+};
+bool VerifySequeceOfBST(BinaryTreeNode *pRoot, int*number,int nlength) {
+	if (i > nlength||number[nlength]!=-858993460)
+		return false;
+	if (pRoot == nullptr&&number == nullptr)
+		return true;
+	if (pRoot == nullptr || number == nullptr) {
+		return false;
+	}
+	if (pRoot->m_pLeft != nullptr)
+		if (!VerifySequeceOfBST(pRoot->m_pLeft, number, nlength))
+			return false;
+	if (pRoot->m_pRight != nullptr)
+		if (!VerifySequeceOfBST(pRoot->m_pRight, number,nlength))
+			return false;
+	if (number[i]) {
+		if (number[i++] == pRoot->m_nValue) {
+			return true;
+		}
+		else
+			return false;
+	}
+}
+int main() {
+	int number[8] = { 5,7,6,9,11,10,8,15 };
+	BinaryTreeNode *pRoot = new BinaryTreeNode(8);
+	pRoot->m_pLeft = new BinaryTreeNode(6);
+	pRoot->m_pLeft->m_pLeft = new BinaryTreeNode(5);
+	pRoot->m_pLeft->m_pRight = new BinaryTreeNode(7);
+	pRoot->m_pRight = new BinaryTreeNode(10);
+	pRoot->m_pRight->m_pLeft = new BinaryTreeNode(9);
+	pRoot->m_pRight->m_pRight = new BinaryTreeNode(11);
+	bool result=VerifySequeceOfBST(pRoot, number, 7);
+	return 0;
+}
