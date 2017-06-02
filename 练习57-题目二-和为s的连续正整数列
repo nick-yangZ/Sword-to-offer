@@ -1,0 +1,41 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"BinaryTree.h"
+using namespace std;
+void PrintTheSeries(int small, int big);
+void FindAndPrintTheSeries(int nNum) {
+	if (nNum < 3)
+		return;
+	int small = 1, big = 2;
+	int nSum = small + big;
+	while (small < nNum / 2) {
+		while (nSum < nNum)
+			nSum += ++big;
+		
+		while (nSum >= nNum && small < big) {
+			if (nSum == nNum)
+				PrintTheSeries(small, big);
+			nSum -= small++;
+		}
+	}
+}
+
+void PrintTheSeries(int small, int big) {
+	while (small <= big)
+		cout << small++<<" ";
+	cout << endl;
+}
+
+int main() {
+	FindAndPrintTheSeries(2001);
+	return 0;
+}
