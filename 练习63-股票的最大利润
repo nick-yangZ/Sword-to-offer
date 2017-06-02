@@ -1,0 +1,34 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include<queue>
+#include<stdlib.h>
+#include<vector>
+#include<string>
+#include<iostream>
+#include<map>
+#include<stack>
+#include<exception>
+#include"ListNode.h"
+using namespace std;
+
+//面试题63-股票的最大利润
+//思路：在扫描整个数组的时候，使用min记录最小值，使用gap记录最大收益。在遇到更小的值的时候更换min，在遇到更大收益的时候更换
+//gap.
+int GetTheMostBenefit(int *pNumber,int length) {
+	int nMin=*pNumber;
+	int nBenefit = 0;
+	for (int i = 0; i < length; i++) {
+		if (pNumber[i] > pNumber[i-1])
+			nBenefit = (pNumber[i] - nMin) > nBenefit ? pNumber[i] - nMin : nBenefit;
+		else
+			nMin = pNumber[i] < nMin ? pNumber[i] : nMin;
+	}
+	return nBenefit;
+}
+
+int main() {
+	int nSharePrice[] = { 9,11,8,5,7,12,16,14 };
+	GetTheMostBenefit(nSharePrice, 8);
+	return 0;
+}
