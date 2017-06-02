@@ -1,0 +1,40 @@
+#include <cstdio>
+#include <memory>
+#include<iostream>
+#include<vector>
+using namespace std;
+
+struct BinaryTreeNode {
+	int m_nValue;
+	BinaryTreeNode*m_pLeft;
+	BinaryTreeNode*m_pRight;
+	BinaryTreeNode(int m_nValue) {
+		this->m_nValue = m_nValue;
+		m_pLeft = nullptr;
+		m_pRight = nullptr;
+	}
+};
+
+void ImageChange(BinaryTreeNode*pRoot) {
+	if (pRoot == nullptr) {
+		return;
+	}
+	BinaryTreeNode*temp;
+	temp = pRoot->m_pLeft;
+	pRoot->m_pLeft = pRoot->m_pRight;
+	pRoot->m_pRight = temp;
+	ImageChange(pRoot->m_pLeft);
+	ImageChange(pRoot->m_pRight);
+
+}
+int main() {
+	BinaryTreeNode*pRoot = new BinaryTreeNode(8);
+	pRoot->m_pLeft = new BinaryTreeNode(6);
+	pRoot->m_pRight = new BinaryTreeNode(10);
+	pRoot->m_pLeft->m_pLeft = new BinaryTreeNode(5);
+	pRoot->m_pLeft->m_pRight = new BinaryTreeNode(7);
+	pRoot->m_pRight->m_pLeft = new BinaryTreeNode(9);
+	pRoot->m_pRight->m_pRight = new BinaryTreeNode(11);
+	ImageChange(pRoot);
+	return 0;
+}
