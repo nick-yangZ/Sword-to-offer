@@ -1,0 +1,52 @@
+#include <cstdio>
+#include <fstream>
+#include<time.h>
+#include "BinaryTree.h"
+using namespace std;
+//找出n个数中，最小的k个数。
+int Partition(int *data, int length, int start, int end);
+void GetLeasrNumbers(int *input, int n, int*output, int k);
+int RandInRange(int start,int end) {
+	srand(time(0));
+	int m = rand();
+	return start + m % (end - start + 1);
+}
+int Partition(int *data, int length, int start, int end) {
+	if (data == nullptr || length < 0 || start < 0 || end < 0)
+		return 0;
+	int Index = RandInRange(start, end);
+	swap(data[Index], data[end]);
+	int small=start-1;
+	for (Index = start; Index < end; Index++) {
+		if (data[Index] < data[end]) {
+			small++;
+			if (small != Index)
+				swap(data[small], data[Index]);
+		}
+	}
+	small++;
+	swap(data[small], data[end]);
+	return small;
+}
+void GetLeasrNumbers(int *input,int n,int*output,int k) {
+	if (input == nullptr || output == nullptr || n < 0 || k<0 || k>n)
+		return;
+	int Index = Partition(input, n, 0, n - 1);
+	while (Index != k - 1) {
+		if (Index < k - 1) {
+			Index = Partition(input, n - Index + 1, Index + 1, n - 1);
+		}
+		if (Index > k - 1) {
+			Index = Partition(input, Index, 0, Index - 1);
+		}
+	}
+	for (int i = 0; i < k; i++)
+		output[i] = input[i];
+}
+int main() {
+	int p[] = { 9,8,7,6,5,4,3,2,1 };
+	int output[4];
+	GetLeasrNumbers(p, 9, output, 4);
+
+	return 0;
+}
