@@ -13,37 +13,37 @@ int FindTheMostnumber(int *pHead,int length) {
 	int end = length - 1;
 	pHead[middle] = pHead[end];
 	pHead[end] = temp;
-	int *pDevide=pHead, *pPass= pHead,*pDevideEqual=pHead;
-	while (*pDevide < pHead[end])
-		pDevide++;
-	pDevideEqual = pDevide;
-	while (*pDevideEqual <= pHead[end]&&pDevideEqual<pHead+end)
-		pDevideEqual++;
-	pPass = pDevideEqual;
+	int *pDivide=pHead, *pPass= pHead,*pDivideEqual=pHead;
+	while (*pDivide < pHead[end])
+		pDivide++;
+	pDivideEqual = pDivide;
+	while (*pDivideEqual <= pHead[end]&&pDivideEqual<pHead+end)
+		pDivideEqual++;
+	pPass = pDivideEqual;
 	while (pPass < pHead+end) {
 		if (*pPass <= pHead[end]) {
 			temp = *pPass;
-			*pPass = *pDevideEqual;
-			*pDevideEqual = temp;
+			*pPass = *pDivideEqual;
+			*pDivideEqual = temp;
 			
-			if (*pDevideEqual < pHead[end]) {
-				*pDevideEqual = *pDevide;
-				*pDevide = temp;
-				pDevide++;
+			if (*pDivideEqual < pHead[end]) {
+				*pDivideEqual = *pDivide;
+				*pDivide = temp;
+				pDivide++;
 			}
-			pDevideEqual++;
+			pDivideEqual++;
 		}
 		pPass++;
 	}
-	temp = *pDevideEqual;
-	*pDevideEqual = pHead[end];
+	temp = *pDivideEqual;
+	*pDivideEqual = pHead[end];
 	pHead[end] = temp;
-	if (*pDevideEqual == pHead[middle])
-		return *pDevideEqual;
-	else if (*pDevideEqual < pHead[middle])
-		return FindTheMostnumber(pDevideEqual + 1, pPass - pDevideEqual);
-	else if (*pDevide > pHead[middle])
-		return FindTheMostnumber(pHead, pDevide - pHead );
+	if (*pDivideEqual == pHead[middle])
+		return *pDivideEqual;
+	else if (*pDivideEqual < pHead[middle])
+		return FindTheMostnumber(pDivideEqual + 1, pPass - pDivideEqual);
+	else if (*pDivide > pHead[middle])
+		return FindTheMostnumber(pHead, pDivide - pHead );
 	return 0;
 }
 
