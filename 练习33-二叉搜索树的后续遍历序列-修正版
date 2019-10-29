@@ -17,25 +17,25 @@ struct BinaryTreeNode
 bool VerifySqueuenceOfBST(int sequeuence[], int length) {
 	if (sequeuence == nullptr || length <= 0)
 		return false;
-	int Devide=0,Check=0;
+	int Divide=0,Check=0;
 	int nRoot=sequeuence[length-1];
 	bool CheckLeft = true;
 	bool CheckRight = true;
 	bool CheckResult=false;
-	while ( sequeuence[Devide]<nRoot) {
-		Devide++;
+	while ( sequeuence[Divide]<nRoot) {
+		Divide++;
 	}
-	Check = Devide;
+	Check = Divide;
 	while (Check<length-1)
 	{
 		if (sequeuence[Check] < nRoot)
 			return false;	
 		Check++;
 	}
-	if (Devide >0 )
-		CheckLeft= VerifySqueuenceOfBST(sequeuence, Devide);
-	if (Devide + 1 < length - 2)
-		CheckRight= VerifySqueuenceOfBST(sequeuence + Devide , length - Devide - 1);
+	if (Divide >0 )
+		CheckLeft= VerifySqueuenceOfBST(sequeuence, Divide);
+	if (Divide + 1 < length - 2)
+		CheckRight= VerifySqueuenceOfBST(sequeuence + Divide , length - Divide - 1);
 	CheckResult = CheckLeft&&CheckRight;
 	return CheckResult;
 	
